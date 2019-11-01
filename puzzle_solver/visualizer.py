@@ -6,17 +6,31 @@ visualizer.py
 """
 
 from os import name, system
+from time import sleep
 
-def visualize(grid):
+def clear_console():
     """
-    visualize(grid) -- visualize puzzle grid
+    clear_console() -- clear the console
+    """
+    system('cls' if name == 'nt' else 'clear')
+
+def visualize(history):
+    """
+    visualize(history) -- visualize puzzle solving history
 
     Parameters
     ----------
-    grid: list[list] -- the 4-by-4 grid to be visualized
+    history: list(int)
+        history of grid, represented in a list of 64-bit ints.
     """
-    system('cls' if name == 'nt' else 'clear')
-    for i, cell in enumerate(grid):
-        print(cell, end=' ')
-        if i % 4 == 3:
-            print()
+    for grid_data in history:
+        grid_list = []
+        for _ in range(16):
+            grid_list.append(grid_data % (1 << 4))
+            grid_data //= (1 << 4)
+        grid_list.reverse()
+
+        clear_console()
+        for i, cell in enumerate(grid_list):
+            print(cell, end='\n' if i % 4 == 3 else ' ')
+        sleep(0.5)
