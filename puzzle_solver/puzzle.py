@@ -71,3 +71,30 @@ def randomize_puzzle(puzzle, shuffles=1000):
         puzzle_list[first] = puzzle_list[second]
         puzzle_list[second] = temp
     return list_to_int64(puzzle_list)
+
+def next_states(puzzle):
+    """
+    next_states(puzzle) -- get possible states of the puzzle
+
+    Parameters
+    ----------
+    puzzle: int
+        The puzzle represented in 64-bit int.
+    """
+    puzzle_list = int64_to_list(puzzle)
+    pos = puzzle_list.index(0)
+    index_list = []
+    available = []
+    if pos > 3:
+        index_list.append(pos - 4)
+    if pos % 4 > 0:
+        index_list.append(pos - 1)
+    if pos % 4 < 3:
+        index_list.append(pos + 1)
+    if pos < 12:
+        index_list.append(pos + 4)
+    for index in index_list:
+        newstate = puzzle_list.copy()
+        newstate[pos], newstate[index] = newstate[index], newstate[pos]
+        available.append(list_to_int64(newstate))
+    return available
