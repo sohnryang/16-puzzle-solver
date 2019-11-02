@@ -7,6 +7,26 @@ A module for solving 16-puzzle using graph search algorithms.
 
 from collections import deque
 from puzzle_solver.puzzle import INITIAL_PUZZLE, next_moves
+def reconstruct_path(tree, finish):
+    """
+    reconstruct_path(tree) -- reconstruct path from BFS spanning tree
+
+    Parameters
+    ----------
+    parent: dict(int, int)
+        The dict containing parent-child relationship of the points.
+
+    finish: int
+        The finishing point of the path.
+    """
+    path = []
+    here = finish
+    while tree[here] != here:
+        path.append(here)
+        here = tree[here]
+    path.append(here)
+    path.reverse()
+    return path
 
 def solve_puzzle_bfs(puzzle):
     """
