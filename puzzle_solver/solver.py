@@ -6,7 +6,13 @@ A module for solving 16-puzzle using graph search algorithms.
 """
 
 from collections import deque
-from puzzle_solver.puzzle import INITIAL_PUZZLE, next_moves
+from math import inf
+from puzzle_solver.puzzle import (
+    INITIAL_PUZZLE,
+    next_moves,
+    int64_to_list,
+)
+
 def reconstruct_path(tree, finish):
     """
     reconstruct_path(tree) -- reconstruct path from BFS spanning tree
