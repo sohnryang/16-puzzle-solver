@@ -16,7 +16,7 @@ def print_puzzle(puzzle):
     Parameters
     ----------
     puzzle: int
-        puzzle represented in 64-bit int.
+        The puzzle represented in 64-bit int.
     """
     puzzle_list = int64_to_list(puzzle)
     for i, square in enumerate(puzzle_list):
@@ -35,10 +35,10 @@ def animate(history, refresh_interval=0.5):
     Parameters
     ----------
     history: list(int)
-        history of grid, represented in a list of 64-bit ints.
+        The history of grid, represented in a list of 64-bit ints.
 
     refresh_interval: float
-        time to delay between prints. 0.5 by default.
+        Time to delay between prints. 0.5 by default.
     """
     for puzzle_state in history:
         clear_console()
