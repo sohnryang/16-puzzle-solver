@@ -7,6 +7,20 @@ visualizer.py
 
 from os import name, system
 from time import sleep
+from puzzle_solver.puzzle import int64_to_list
+
+def print_puzzle(puzzle):
+    """
+    print_puzzle(puzzle) -- print the puzzle
+
+    Parameters
+    ----------
+    puzzle: int
+        puzzle represented in 64-bit int.
+    """
+    puzzle_list = int64_to_list(puzzle)
+    for i, square in enumerate(puzzle_list):
+        print(square, end='\n' if i % 4 == 3 else ' ')
 
 def clear_console():
     """
@@ -14,23 +28,19 @@ def clear_console():
     """
     system('cls' if name == 'nt' else 'clear')
 
-def visualize(history):
+def animate(history, refresh_interval=0.5):
     """
-    visualize(history) -- visualize puzzle solving history
+    animate(history) -- visualize puzzle solving history by giving an animation
 
     Parameters
     ----------
     history: list(int)
         history of grid, represented in a list of 64-bit ints.
-    """
-    for grid_data in history:
-        grid_list = []
-        for _ in range(16):
-            grid_list.append(grid_data % (1 << 4))
-            grid_data //= (1 << 4)
-        grid_list.reverse()
 
+    refresh_interval: float
+        time to delay between prints. 0.5 by default.
+    """
+    for puzzle_state in history:
         clear_console()
-        for i, cell in enumerate(grid_list):
-            print(cell, end='\n' if i % 4 == 3 else ' ')
-        sleep(0.5)
+        print_puzzle(puzzle_state)
+        sleep(refresh_interval)
