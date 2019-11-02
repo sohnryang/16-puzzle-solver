@@ -72,9 +72,9 @@ def randomize_puzzle(puzzle, shuffles=1000):
         puzzle_list[second] = temp
     return list_to_int64(puzzle_list)
 
-def next_states(puzzle):
+def next_moves(puzzle):
     """
-    next_states(puzzle) -- get possible states of the puzzle
+    next_moves(puzzle) -- get possible moves of the puzzle
 
     Parameters
     ----------
