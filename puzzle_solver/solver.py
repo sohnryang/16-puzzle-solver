@@ -64,11 +64,4 @@ def solve_puzzle_bfs(puzzle):
 
     if INITIAL_PUZZLE not in cost:
         return None
-    history = []
-    here = INITIAL_PUZZLE
-    while parent[here] != here:
-        history.append(here)
-        here = parent[here]
-    history.append(here)
-    history.reverse()
-    return history
+    return reconstruct_path(parent, INITIAL_PUZZLE)
