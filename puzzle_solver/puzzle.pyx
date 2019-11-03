@@ -26,11 +26,12 @@ def int64_to_list(puzzle):
     puzzle: int
         The puzzle represented in 64-bit int.
     """
-    puzzle_list = []
-    for _ in range(16):
-        puzzle_list.append(puzzle % (1 << 4))
-        puzzle >>= 4
-    puzzle_list.reverse()
+    cdef unsigned long long puzzle_ctype = puzzle
+    cdef int puzzle_list[16]
+    cdef int i
+    for i in range(16):
+        puzzle_list[15 - i] = puzzle_ctype % (1 << 4)
+        puzzle_ctype >>= 4
     return puzzle_list
 
 def list_to_int64(puzzle_list):
