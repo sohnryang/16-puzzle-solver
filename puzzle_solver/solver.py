@@ -6,12 +6,15 @@ A module for solving 16-puzzle using graph search algorithms.
 """
 
 from collections import deque
+from colorama import Fore, Style
+from heapq import heapify, heappush, heappop
 from math import inf
 from puzzle_solver.puzzle import (
     INITIAL_PUZZLE,
     next_moves,
     int64_to_list,
 )
+from puzzle_solver.visualizer import print_puzzle, clear_console
 
 def reconstruct_path(tree, finish):
     """
@@ -71,3 +74,53 @@ def solve_puzzle_bfs(puzzle):
     if INITIAL_PUZZLE not in cost:
         return None
     return reconstruct_path(parent, INITIAL_PUZZLE)
+
+def solve_puzzle_astar(puzzle):
+    """
+    solve_puzzle_astar(puzzle) -- solve the puzzle with A* algorithm
+
+    Parameters
+    ----------
+    puzzle: int
+        The initial state of the puzzle, represented in 64-bit int.
+    """
+    def heuristic(puzzle):
+        result = 0
+        for i, square in enumerate(int64_to_list(puzzle)):
+            if square != 0:
+                current_pos = (i % 4, i // 4)
+                correct_pos = ((square - 1) % 4, (square - 1) // 4)
+                result += abs(current_pos[0] - correct_pos[0])
+                result += abs(current_pos[1] - correct_pos[1])
+        return result
+
+    if puzzle == INITIAL_PUZZLE:
+        return [puzzle]
+
+    cost = dict()
+    h_value = dict()
+    parent = dict()
+    cost[puzzle] = 0
+    h_value[puzzle] = heuristic(puzzle)
+    visit_queue = [(cost[puzzle] + h_value[puzzle], puzzle)]
+    parent[puzzle] = puzzle
+    while visit_queue:
+        _, here = heappop(visit_queue)
+        clear_console()
+        print(Fore.CYAN)
+        print_puzzle(here)
+        print(Style.RESET_ALL)
+        current_cost = cost[here]
+        next_states = next_moves(here)
+        for next_state in next_states:
+            if next_state not in cost:
+                print_puzzle(next_state)
+                parent[next_state] = here
+                cost[next_state] = current_cost + 1
+                h_value[next_state] = heuristic(next_state)
+                if next_state == INITIAL_PUZZLE:
+                    return reconstruct_path(parent, INITIAL_PUZZLE)
+                heappush(visit_queue, (cost[next_state] + h_value[next_state],
+                                       next_state))
+
+    return None
