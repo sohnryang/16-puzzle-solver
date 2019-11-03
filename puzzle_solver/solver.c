@@ -1203,6 +1203,17 @@ static CYTHON_INLINE int __Pyx_IterFinish(void);
 /* UnpackItemEndCheck.proto */
 static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected);
 
+/* PyObjectFormat.proto */
+#if CYTHON_USE_UNICODE_WRITER
+static PyObject* __Pyx_PyObject_Format(PyObject* s, PyObject* f);
+#else
+#define __Pyx_PyObject_Format(s, f) PyObject_Format(s, f)
+#endif
+
+/* JoinPyUnicode.proto */
+static PyObject* __Pyx_PyUnicode_Join(PyObject* value_tuple, Py_ssize_t value_count, Py_ssize_t result_ulength,
+                                      Py_UCS4 max_char);
+
 /* GetTopmostException.proto */
 #if CYTHON_USE_EXC_INFO_STACK
 static _PyErr_StackItem * __Pyx_PyErr_GetTopmostException(PyThreadState *tstate);
@@ -1346,13 +1357,17 @@ static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_OverflowError;
 static PyObject *__pyx_builtin_enumerate;
 static PyObject *__pyx_builtin_IndexError;
+static const char __pyx_k_d[] = "d";
 static const char __pyx_k_i[] = "i";
-static const char __pyx_k__7[] = "_";
+static const char __pyx_k__4[] = "";
+static const char __pyx_k__10[] = "_";
+static const char __pyx_k_end[] = "end";
 static const char __pyx_k_inf[] = "inf";
 static const char __pyx_k_CYAN[] = "CYAN";
 static const char __pyx_k_Fore[] = "Fore";
-static const char __pyx_k_cost[] = "cost";
+static const char __pyx_k_cost[] = ", cost = ";
 static const char __pyx_k_here[] = "here";
+static const char __pyx_k_init[] = "init";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_math[] = "math";
 static const char __pyx_k_name[] = "__name__";
@@ -1364,7 +1379,9 @@ static const char __pyx_k_deque[] = "deque";
 static const char __pyx_k_heapq[] = "heapq";
 static const char __pyx_k_print[] = "print";
 static const char __pyx_k_range[] = "range";
+static const char __pyx_k_YELLOW[] = "YELLOW";
 static const char __pyx_k_append[] = "append";
+static const char __pyx_k_cost_2[] = "cost";
 static const char __pyx_k_finish[] = "finish";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_parent[] = "parent";
@@ -1396,12 +1413,15 @@ static const char __pyx_k_visit_queue[] = "visit_queue";
 static const char __pyx_k_current_cost[] = "current_cost";
 static const char __pyx_k_print_puzzle[] = "print_puzzle";
 static const char __pyx_k_puzzle_ctype[] = "puzzle_ctype";
+static const char __pyx_k_Current_state[] = "Current state:";
 static const char __pyx_k_OverflowError[] = "OverflowError";
 static const char __pyx_k_clear_console[] = "clear_console";
 static const char __pyx_k_int64_to_list[] = "int64_to_list";
 static const char __pyx_k_INITIAL_PUZZLE[] = "INITIAL_PUZZLE";
+static const char __pyx_k_heuristic_value[] = "heuristic_value = ";
 static const char __pyx_k_reconstruct_path[] = "reconstruct_path";
 static const char __pyx_k_solve_puzzle_bfs[] = "solve_puzzle_bfs";
+static const char __pyx_k_Available_state_s[] = "Available state(s):";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_solve_puzzle_astar[] = "solve_puzzle_astar";
 static const char __pyx_k_puzzle_solver_puzzle[] = "puzzle_solver.puzzle";
@@ -1409,7 +1429,9 @@ static const char __pyx_k_puzzle_solver_solver[] = "puzzle_solver.solver";
 static const char __pyx_k_puzzle_solver_visualizer[] = "puzzle_solver.visualizer";
 static const char __pyx_k_solver_py_A_module_for_solving[] = "\nsolver.py\n=========\n\nA module for solving 16-puzzle using graph search algorithms.\n";
 static const char __pyx_k_solve_puzzle_astar_locals_heuris[] = "solve_puzzle_astar.<locals>.heuristic";
+static PyObject *__pyx_kp_u_Available_state_s;
 static PyObject *__pyx_n_s_CYAN;
+static PyObject *__pyx_kp_u_Current_state;
 static PyObject *__pyx_n_s_Fore;
 static PyObject *__pyx_n_s_INITIAL_PUZZLE;
 static PyObject *__pyx_n_s_IndexError;
@@ -1417,17 +1439,22 @@ static PyObject *__pyx_n_s_OverflowError;
 static PyObject *__pyx_n_s_RESET_ALL;
 static PyObject *__pyx_n_s_Style;
 static PyObject *__pyx_n_s_TypeError;
-static PyObject *__pyx_n_s__7;
+static PyObject *__pyx_n_s_YELLOW;
+static PyObject *__pyx_n_s__10;
+static PyObject *__pyx_kp_u__4;
 static PyObject *__pyx_n_s_append;
 static PyObject *__pyx_n_s_clear_console;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_collections;
 static PyObject *__pyx_n_s_colorama;
 static PyObject *__pyx_n_s_correct_pos;
-static PyObject *__pyx_n_s_cost;
+static PyObject *__pyx_kp_u_cost;
+static PyObject *__pyx_n_s_cost_2;
 static PyObject *__pyx_n_s_current_cost;
 static PyObject *__pyx_n_s_current_pos;
+static PyObject *__pyx_n_u_d;
 static PyObject *__pyx_n_s_deque;
+static PyObject *__pyx_n_s_end;
 static PyObject *__pyx_n_s_enumerate;
 static PyObject *__pyx_n_s_finish;
 static PyObject *__pyx_n_s_h_value;
@@ -1437,9 +1464,11 @@ static PyObject *__pyx_n_s_heappush;
 static PyObject *__pyx_n_s_heapq;
 static PyObject *__pyx_n_s_here;
 static PyObject *__pyx_n_s_heuristic;
+static PyObject *__pyx_kp_u_heuristic_value;
 static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_inf;
+static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_n_s_int64_to_list;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_math;
@@ -1481,15 +1510,17 @@ static PyObject *__pyx_int_4;
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__5;
+static PyObject *__pyx_tuple__6;
 static PyObject *__pyx_tuple__8;
+static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_codeobj__2;
-static PyObject *__pyx_codeobj__4;
-static PyObject *__pyx_codeobj__6;
+static PyObject *__pyx_codeobj__7;
 static PyObject *__pyx_codeobj__9;
+static PyObject *__pyx_codeobj__12;
 /* Late includes */
 
-/* "puzzle_solver/solver.pyx":19
- * from puzzle_solver.visualizer import print_puzzle, clear_console
+/* "puzzle_solver/solver.pyx":21
+ * init()
  * 
  * def reconstruct_path(tree, finish):             # <<<<<<<<<<<<<<
  *     """
@@ -1529,11 +1560,11 @@ static PyObject *__pyx_pw_13puzzle_solver_6solver_1reconstruct_path(PyObject *__
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_finish)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("reconstruct_path", 1, 2, 2, 1); __PYX_ERR(0, 19, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("reconstruct_path", 1, 2, 2, 1); __PYX_ERR(0, 21, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "reconstruct_path") < 0)) __PYX_ERR(0, 19, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "reconstruct_path") < 0)) __PYX_ERR(0, 21, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1546,7 +1577,7 @@ static PyObject *__pyx_pw_13puzzle_solver_6solver_1reconstruct_path(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("reconstruct_path", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 19, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("reconstruct_path", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 21, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("puzzle_solver.solver.reconstruct_path", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1570,19 +1601,19 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_reconstruct_path(CYTHON_UNUSED
   int __pyx_t_4;
   __Pyx_RefNannySetupContext("reconstruct_path", 0);
 
-  /* "puzzle_solver/solver.pyx":31
+  /* "puzzle_solver/solver.pyx":33
  *         The finishing point of the path.
  *     """
  *     path = []             # <<<<<<<<<<<<<<
  *     here = finish
  *     while tree[here] != here:
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_path = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "puzzle_solver/solver.pyx":32
+  /* "puzzle_solver/solver.pyx":34
  *     """
  *     path = []
  *     here = finish             # <<<<<<<<<<<<<<
@@ -1592,7 +1623,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_reconstruct_path(CYTHON_UNUSED
   __Pyx_INCREF(__pyx_v_finish);
   __pyx_v_here = __pyx_v_finish;
 
-  /* "puzzle_solver/solver.pyx":33
+  /* "puzzle_solver/solver.pyx":35
  *     path = []
  *     here = finish
  *     while tree[here] != here:             # <<<<<<<<<<<<<<
@@ -1600,55 +1631,55 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_reconstruct_path(CYTHON_UNUSED
  *         here = tree[here]
  */
   while (1) {
-    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_tree, __pyx_v_here); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_tree, __pyx_v_here); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyObject_RichCompare(__pyx_t_1, __pyx_v_here, Py_NE); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+    __pyx_t_2 = PyObject_RichCompare(__pyx_t_1, __pyx_v_here, Py_NE); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 33, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 35, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (!__pyx_t_3) break;
 
-    /* "puzzle_solver/solver.pyx":34
+    /* "puzzle_solver/solver.pyx":36
  *     here = finish
  *     while tree[here] != here:
  *         path.append(here)             # <<<<<<<<<<<<<<
  *         here = tree[here]
  *     path.append(here)
  */
-    __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_path, __pyx_v_here); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 34, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_path, __pyx_v_here); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 36, __pyx_L1_error)
 
-    /* "puzzle_solver/solver.pyx":35
+    /* "puzzle_solver/solver.pyx":37
  *     while tree[here] != here:
  *         path.append(here)
  *         here = tree[here]             # <<<<<<<<<<<<<<
  *     path.append(here)
  *     path.reverse()
  */
-    __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_tree, __pyx_v_here); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 35, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_tree, __pyx_v_here); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 37, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF_SET(__pyx_v_here, __pyx_t_2);
     __pyx_t_2 = 0;
   }
 
-  /* "puzzle_solver/solver.pyx":36
+  /* "puzzle_solver/solver.pyx":38
  *         path.append(here)
  *         here = tree[here]
  *     path.append(here)             # <<<<<<<<<<<<<<
  *     path.reverse()
  *     return path
  */
-  __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_path, __pyx_v_here); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyList_Append(__pyx_v_path, __pyx_v_here); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 38, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":37
+  /* "puzzle_solver/solver.pyx":39
  *         here = tree[here]
  *     path.append(here)
  *     path.reverse()             # <<<<<<<<<<<<<<
  *     return path
  * 
  */
-  __pyx_t_4 = PyList_Reverse(__pyx_v_path); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 37, __pyx_L1_error)
+  __pyx_t_4 = PyList_Reverse(__pyx_v_path); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(0, 39, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":38
+  /* "puzzle_solver/solver.pyx":40
  *     path.append(here)
  *     path.reverse()
  *     return path             # <<<<<<<<<<<<<<
@@ -1660,8 +1691,8 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_reconstruct_path(CYTHON_UNUSED
   __pyx_r = __pyx_v_path;
   goto __pyx_L0;
 
-  /* "puzzle_solver/solver.pyx":19
- * from puzzle_solver.visualizer import print_puzzle, clear_console
+  /* "puzzle_solver/solver.pyx":21
+ * init()
  * 
  * def reconstruct_path(tree, finish):             # <<<<<<<<<<<<<<
  *     """
@@ -1682,7 +1713,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_reconstruct_path(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "puzzle_solver/solver.pyx":40
+/* "puzzle_solver/solver.pyx":42
  *     return path
  * 
  * def solve_puzzle_bfs(puzzle):             # <<<<<<<<<<<<<<
@@ -1729,22 +1760,22 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   PyObject *__pyx_t_11 = NULL;
   __Pyx_RefNannySetupContext("solve_puzzle_bfs", 0);
 
-  /* "puzzle_solver/solver.pyx":49
+  /* "puzzle_solver/solver.pyx":51
  *         The initial state of the puzzle, represented in 64-bit int.
  *     """
  *     if puzzle == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
  *         return [puzzle]
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_RichCompare(__pyx_v_puzzle, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_2 = PyObject_RichCompare(__pyx_v_puzzle, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 51, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_3) {
 
-    /* "puzzle_solver/solver.pyx":50
+    /* "puzzle_solver/solver.pyx":52
  *     """
  *     if puzzle == INITIAL_PUZZLE:
  *         return [puzzle]             # <<<<<<<<<<<<<<
@@ -1752,7 +1783,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  *     cost = dict()
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_v_puzzle);
     __Pyx_GIVEREF(__pyx_v_puzzle);
@@ -1761,7 +1792,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     __pyx_t_2 = 0;
     goto __pyx_L0;
 
-    /* "puzzle_solver/solver.pyx":49
+    /* "puzzle_solver/solver.pyx":51
  *         The initial state of the puzzle, represented in 64-bit int.
  *     """
  *     if puzzle == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
@@ -1770,38 +1801,38 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
   }
 
-  /* "puzzle_solver/solver.pyx":52
+  /* "puzzle_solver/solver.pyx":54
  *         return [puzzle]
  * 
  *     cost = dict()             # <<<<<<<<<<<<<<
  *     parent = dict()
  *     visit_queue = deque()
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_cost = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":53
+  /* "puzzle_solver/solver.pyx":55
  * 
  *     cost = dict()
  *     parent = dict()             # <<<<<<<<<<<<<<
  *     visit_queue = deque()
  *     visit_queue.append(puzzle)
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_parent = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":54
+  /* "puzzle_solver/solver.pyx":56
  *     cost = dict()
  *     parent = dict()
  *     visit_queue = deque()             # <<<<<<<<<<<<<<
  *     visit_queue.append(puzzle)
  *     cost[puzzle] = 0
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_deque); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_deque); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -1815,40 +1846,40 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   }
   __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_visit_queue = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":55
+  /* "puzzle_solver/solver.pyx":57
  *     parent = dict()
  *     visit_queue = deque()
  *     visit_queue.append(puzzle)             # <<<<<<<<<<<<<<
  *     cost[puzzle] = 0
  *     parent[puzzle] = puzzle
  */
-  __pyx_t_5 = __Pyx_PyObject_Append(__pyx_v_visit_queue, __pyx_v_puzzle); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Append(__pyx_v_visit_queue, __pyx_v_puzzle); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 57, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":56
+  /* "puzzle_solver/solver.pyx":58
  *     visit_queue = deque()
  *     visit_queue.append(puzzle)
  *     cost[puzzle] = 0             # <<<<<<<<<<<<<<
  *     parent[puzzle] = puzzle
  *     while visit_queue:
  */
-  if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_puzzle, __pyx_int_0) < 0)) __PYX_ERR(0, 56, __pyx_L1_error)
+  if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_puzzle, __pyx_int_0) < 0)) __PYX_ERR(0, 58, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":57
+  /* "puzzle_solver/solver.pyx":59
  *     visit_queue.append(puzzle)
  *     cost[puzzle] = 0
  *     parent[puzzle] = puzzle             # <<<<<<<<<<<<<<
  *     while visit_queue:
  *         here = visit_queue.popleft()
  */
-  if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_puzzle, __pyx_v_puzzle) < 0)) __PYX_ERR(0, 57, __pyx_L1_error)
+  if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_puzzle, __pyx_v_puzzle) < 0)) __PYX_ERR(0, 59, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":58
+  /* "puzzle_solver/solver.pyx":60
  *     cost[puzzle] = 0
  *     parent[puzzle] = puzzle
  *     while visit_queue:             # <<<<<<<<<<<<<<
@@ -1856,17 +1887,17 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  *         current_cost = cost[here]
  */
   while (1) {
-    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_visit_queue); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 58, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_v_visit_queue); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 60, __pyx_L1_error)
     if (!__pyx_t_3) break;
 
-    /* "puzzle_solver/solver.pyx":59
+    /* "puzzle_solver/solver.pyx":61
  *     parent[puzzle] = puzzle
  *     while visit_queue:
  *         here = visit_queue.popleft()             # <<<<<<<<<<<<<<
  *         current_cost = cost[here]
  *         next_states = next_moves(here)
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_visit_queue, __pyx_n_s_popleft); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_visit_queue, __pyx_n_s_popleft); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -1880,32 +1911,32 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     }
     __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_XDECREF_SET(__pyx_v_here, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "puzzle_solver/solver.pyx":60
+    /* "puzzle_solver/solver.pyx":62
  *     while visit_queue:
  *         here = visit_queue.popleft()
  *         current_cost = cost[here]             # <<<<<<<<<<<<<<
  *         next_states = next_moves(here)
  *         solved = False
  */
-    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_here); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 60, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_here); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_XDECREF_SET(__pyx_v_current_cost, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "puzzle_solver/solver.pyx":61
+    /* "puzzle_solver/solver.pyx":63
  *         here = visit_queue.popleft()
  *         current_cost = cost[here]
  *         next_states = next_moves(here)             # <<<<<<<<<<<<<<
  *         solved = False
  *         for next_state in next_states:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_next_moves); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 61, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_next_moves); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -1919,13 +1950,13 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     }
     __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_4, __pyx_v_here) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_here);
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_XDECREF_SET(__pyx_v_next_states, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "puzzle_solver/solver.pyx":62
+    /* "puzzle_solver/solver.pyx":64
  *         current_cost = cost[here]
  *         next_states = next_moves(here)
  *         solved = False             # <<<<<<<<<<<<<<
@@ -1934,7 +1965,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
     __pyx_v_solved = 0;
 
-    /* "puzzle_solver/solver.pyx":63
+    /* "puzzle_solver/solver.pyx":65
  *         next_states = next_moves(here)
  *         solved = False
  *         for next_state in next_states:             # <<<<<<<<<<<<<<
@@ -1945,26 +1976,26 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
       __pyx_t_2 = __pyx_v_next_states; __Pyx_INCREF(__pyx_t_2); __pyx_t_6 = 0;
       __pyx_t_7 = NULL;
     } else {
-      __pyx_t_6 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_next_states); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __pyx_t_6 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_next_states); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 63, __pyx_L1_error)
+      __pyx_t_7 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 65, __pyx_L1_error)
     }
     for (;;) {
       if (likely(!__pyx_t_7)) {
         if (likely(PyList_CheckExact(__pyx_t_2))) {
           if (__pyx_t_6 >= PyList_GET_SIZE(__pyx_t_2)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 63, __pyx_L1_error)
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         } else {
           if (__pyx_t_6 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 63, __pyx_L1_error)
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_6); __Pyx_INCREF(__pyx_t_1); __pyx_t_6++; if (unlikely(0 < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 63, __pyx_L1_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_6); __pyx_t_6++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         }
@@ -1974,7 +2005,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 63, __pyx_L1_error)
+            else __PYX_ERR(0, 65, __pyx_L1_error)
           }
           break;
         }
@@ -1983,54 +2014,54 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
       __Pyx_XDECREF_SET(__pyx_v_next_state, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "puzzle_solver/solver.pyx":64
+      /* "puzzle_solver/solver.pyx":66
  *         solved = False
  *         for next_state in next_states:
  *             if next_state not in cost:             # <<<<<<<<<<<<<<
  *                 parent[next_state] = here
  *                 cost[next_state] = current_cost + 1
  */
-      __pyx_t_3 = (__Pyx_PyDict_ContainsTF(__pyx_v_next_state, __pyx_v_cost, Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 64, __pyx_L1_error)
+      __pyx_t_3 = (__Pyx_PyDict_ContainsTF(__pyx_v_next_state, __pyx_v_cost, Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
       __pyx_t_8 = (__pyx_t_3 != 0);
       if (__pyx_t_8) {
 
-        /* "puzzle_solver/solver.pyx":65
+        /* "puzzle_solver/solver.pyx":67
  *         for next_state in next_states:
  *             if next_state not in cost:
  *                 parent[next_state] = here             # <<<<<<<<<<<<<<
  *                 cost[next_state] = current_cost + 1
  *                 if next_state == INITIAL_PUZZLE:
  */
-        if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_next_state, __pyx_v_here) < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
+        if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_next_state, __pyx_v_here) < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
 
-        /* "puzzle_solver/solver.pyx":66
+        /* "puzzle_solver/solver.pyx":68
  *             if next_state not in cost:
  *                 parent[next_state] = here
  *                 cost[next_state] = current_cost + 1             # <<<<<<<<<<<<<<
  *                 if next_state == INITIAL_PUZZLE:
  *                     solved = True
  */
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_current_cost, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_current_cost, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 68, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_next_state, __pyx_t_1) < 0)) __PYX_ERR(0, 66, __pyx_L1_error)
+        if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_next_state, __pyx_t_1) < 0)) __PYX_ERR(0, 68, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "puzzle_solver/solver.pyx":67
+        /* "puzzle_solver/solver.pyx":69
  *                 parent[next_state] = here
  *                 cost[next_state] = current_cost + 1
  *                 if next_state == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
  *                     solved = True
  *                     break
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 69, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_4 = PyObject_RichCompare(__pyx_v_next_state, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 67, __pyx_L1_error)
+        __pyx_t_4 = PyObject_RichCompare(__pyx_v_next_state, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 69, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 67, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 69, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         if (__pyx_t_8) {
 
-          /* "puzzle_solver/solver.pyx":68
+          /* "puzzle_solver/solver.pyx":70
  *                 cost[next_state] = current_cost + 1
  *                 if next_state == INITIAL_PUZZLE:
  *                     solved = True             # <<<<<<<<<<<<<<
@@ -2039,7 +2070,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
           __pyx_v_solved = 1;
 
-          /* "puzzle_solver/solver.pyx":69
+          /* "puzzle_solver/solver.pyx":71
  *                 if next_state == INITIAL_PUZZLE:
  *                     solved = True
  *                     break             # <<<<<<<<<<<<<<
@@ -2048,7 +2079,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
           goto __pyx_L7_break;
 
-          /* "puzzle_solver/solver.pyx":67
+          /* "puzzle_solver/solver.pyx":69
  *                 parent[next_state] = here
  *                 cost[next_state] = current_cost + 1
  *                 if next_state == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
@@ -2057,16 +2088,16 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
         }
 
-        /* "puzzle_solver/solver.pyx":70
+        /* "puzzle_solver/solver.pyx":72
  *                     solved = True
  *                     break
  *                 visit_queue.append(next_state)             # <<<<<<<<<<<<<<
  *         if solved:
  *             break
  */
-        __pyx_t_5 = __Pyx_PyObject_Append(__pyx_v_visit_queue, __pyx_v_next_state); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 70, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Append(__pyx_v_visit_queue, __pyx_v_next_state); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 72, __pyx_L1_error)
 
-        /* "puzzle_solver/solver.pyx":64
+        /* "puzzle_solver/solver.pyx":66
  *         solved = False
  *         for next_state in next_states:
  *             if next_state not in cost:             # <<<<<<<<<<<<<<
@@ -2075,7 +2106,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
       }
 
-      /* "puzzle_solver/solver.pyx":63
+      /* "puzzle_solver/solver.pyx":65
  *         next_states = next_moves(here)
  *         solved = False
  *         for next_state in next_states:             # <<<<<<<<<<<<<<
@@ -2086,7 +2117,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     __pyx_L7_break:;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "puzzle_solver/solver.pyx":71
+    /* "puzzle_solver/solver.pyx":73
  *                     break
  *                 visit_queue.append(next_state)
  *         if solved:             # <<<<<<<<<<<<<<
@@ -2096,7 +2127,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     __pyx_t_8 = (__pyx_v_solved != 0);
     if (__pyx_t_8) {
 
-      /* "puzzle_solver/solver.pyx":72
+      /* "puzzle_solver/solver.pyx":74
  *                 visit_queue.append(next_state)
  *         if solved:
  *             break             # <<<<<<<<<<<<<<
@@ -2105,7 +2136,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
       goto __pyx_L5_break;
 
-      /* "puzzle_solver/solver.pyx":71
+      /* "puzzle_solver/solver.pyx":73
  *                     break
  *                 visit_queue.append(next_state)
  *         if solved:             # <<<<<<<<<<<<<<
@@ -2116,21 +2147,21 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   }
   __pyx_L5_break:;
 
-  /* "puzzle_solver/solver.pyx":74
+  /* "puzzle_solver/solver.pyx":76
  *             break
  * 
  *     if INITIAL_PUZZLE not in cost:             # <<<<<<<<<<<<<<
  *         return None
  *     return reconstruct_path(parent, INITIAL_PUZZLE)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_8 = (__Pyx_PyDict_ContainsTF(__pyx_t_2, __pyx_v_cost, Py_NE)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __pyx_t_8 = (__Pyx_PyDict_ContainsTF(__pyx_t_2, __pyx_v_cost, Py_NE)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 76, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_3 = (__pyx_t_8 != 0);
   if (__pyx_t_3) {
 
-    /* "puzzle_solver/solver.pyx":75
+    /* "puzzle_solver/solver.pyx":77
  * 
  *     if INITIAL_PUZZLE not in cost:
  *         return None             # <<<<<<<<<<<<<<
@@ -2141,7 +2172,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "puzzle_solver/solver.pyx":74
+    /* "puzzle_solver/solver.pyx":76
  *             break
  * 
  *     if INITIAL_PUZZLE not in cost:             # <<<<<<<<<<<<<<
@@ -2150,7 +2181,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  */
   }
 
-  /* "puzzle_solver/solver.pyx":76
+  /* "puzzle_solver/solver.pyx":78
  *     if INITIAL_PUZZLE not in cost:
  *         return None
  *     return reconstruct_path(parent, INITIAL_PUZZLE)             # <<<<<<<<<<<<<<
@@ -2158,9 +2189,9 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
  * def solve_puzzle_astar(puzzle):
  */
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_reconstruct_path); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_reconstruct_path); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_9 = NULL;
   __pyx_t_10 = 0;
@@ -2177,7 +2208,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_4)) {
     PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_v_parent, __pyx_t_1};
-    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2186,14 +2217,14 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
     PyObject *__pyx_temp[3] = {__pyx_t_9, __pyx_v_parent, __pyx_t_1};
-    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else
   #endif
   {
-    __pyx_t_11 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_11 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
     if (__pyx_t_9) {
       __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -2204,7 +2235,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
     __Pyx_GIVEREF(__pyx_t_1);
     PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 76, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_11, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   }
@@ -2213,7 +2244,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "puzzle_solver/solver.pyx":40
+  /* "puzzle_solver/solver.pyx":42
  *     return path
  * 
  * def solve_puzzle_bfs(puzzle):             # <<<<<<<<<<<<<<
@@ -2243,7 +2274,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_2solve_puzzle_bfs(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "puzzle_solver/solver.pyx":78
+/* "puzzle_solver/solver.pyx":80
  *     return reconstruct_path(parent, INITIAL_PUZZLE)
  * 
  * def solve_puzzle_astar(puzzle):             # <<<<<<<<<<<<<<
@@ -2266,7 +2297,7 @@ static PyObject *__pyx_pw_13puzzle_solver_6solver_5solve_puzzle_astar(PyObject *
   return __pyx_r;
 }
 
-/* "puzzle_solver/solver.pyx":87
+/* "puzzle_solver/solver.pyx":89
  *         The initial state of the puzzle, represented in 64-bit int.
  *     """
  *     def heuristic(puzzle):             # <<<<<<<<<<<<<<
@@ -2309,17 +2340,17 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
   int __pyx_t_9;
   __Pyx_RefNannySetupContext("heuristic", 0);
 
-  /* "puzzle_solver/solver.pyx":88
+  /* "puzzle_solver/solver.pyx":90
  *     """
  *     def heuristic(puzzle):
  *         cdef unsigned long long puzzle_ctype = puzzle             # <<<<<<<<<<<<<<
  *         cdef int result = 0
  *         cdef int i
  */
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_v_puzzle); if (unlikely((__pyx_t_1 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 88, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_v_puzzle); if (unlikely((__pyx_t_1 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 90, __pyx_L1_error)
   __pyx_v_puzzle_ctype = __pyx_t_1;
 
-  /* "puzzle_solver/solver.pyx":89
+  /* "puzzle_solver/solver.pyx":91
  *     def heuristic(puzzle):
  *         cdef unsigned long long puzzle_ctype = puzzle
  *         cdef int result = 0             # <<<<<<<<<<<<<<
@@ -2328,16 +2359,16 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
  */
   __pyx_v_result = 0;
 
-  /* "puzzle_solver/solver.pyx":92
+  /* "puzzle_solver/solver.pyx":94
  *         cdef int i
  *         cdef int squares[16]
  *         squares = int64_to_list(puzzle_ctype)             # <<<<<<<<<<<<<<
  *         for i in range(16):
  *             square = squares[i]
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_int64_to_list); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_int64_to_list); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_v_puzzle_ctype); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_v_puzzle_ctype); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -2352,14 +2383,14 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
   __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(__Pyx_carray_from_py_int(__pyx_t_2, __pyx_t_6, 16) < 0)) __PYX_ERR(0, 92, __pyx_L1_error)
+  if (unlikely(__Pyx_carray_from_py_int(__pyx_t_2, __pyx_t_6, 16) < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   memcpy(&(__pyx_v_squares[0]), __pyx_t_6, sizeof(__pyx_v_squares[0]) * (16));
 
-  /* "puzzle_solver/solver.pyx":93
+  /* "puzzle_solver/solver.pyx":95
  *         cdef int squares[16]
  *         squares = int64_to_list(puzzle_ctype)
  *         for i in range(16):             # <<<<<<<<<<<<<<
@@ -2369,43 +2400,43 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
   for (__pyx_t_7 = 0; __pyx_t_7 < 16; __pyx_t_7+=1) {
     __pyx_v_i = __pyx_t_7;
 
-    /* "puzzle_solver/solver.pyx":94
+    /* "puzzle_solver/solver.pyx":96
  *         squares = int64_to_list(puzzle_ctype)
  *         for i in range(16):
  *             square = squares[i]             # <<<<<<<<<<<<<<
  *             if square != 0:
  *                 current_pos = (i % 4, i // 4)
  */
-    __pyx_t_2 = __Pyx_PyInt_From_int((__pyx_v_squares[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_From_int((__pyx_v_squares[__pyx_v_i])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_XDECREF_SET(__pyx_v_square, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "puzzle_solver/solver.pyx":95
+    /* "puzzle_solver/solver.pyx":97
  *         for i in range(16):
  *             square = squares[i]
  *             if square != 0:             # <<<<<<<<<<<<<<
  *                 current_pos = (i % 4, i // 4)
  *                 correct_pos = ((square - 1) % 4, (square - 1) // 4)
  */
-    __pyx_t_2 = __Pyx_PyInt_NeObjC(__pyx_v_square, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyInt_NeObjC(__pyx_v_square, __pyx_int_0, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 95, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_8) {
 
-      /* "puzzle_solver/solver.pyx":96
+      /* "puzzle_solver/solver.pyx":98
  *             square = squares[i]
  *             if square != 0:
  *                 current_pos = (i % 4, i // 4)             # <<<<<<<<<<<<<<
  *                 correct_pos = ((square - 1) % 4, (square - 1) // 4)
  *                 result += abs(current_pos[0] - correct_pos[0])
  */
-      __pyx_t_2 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_v_i, 4)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_From_long(__Pyx_mod_long(__pyx_v_i, 4)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 98, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_div_long(__pyx_v_i, 4)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 96, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_div_long(__pyx_v_i, 4)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 96, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 98, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_2);
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
@@ -2416,24 +2447,24 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
       __Pyx_XDECREF_SET(__pyx_v_current_pos, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "puzzle_solver/solver.pyx":97
+      /* "puzzle_solver/solver.pyx":99
  *             if square != 0:
  *                 current_pos = (i % 4, i // 4)
  *                 correct_pos = ((square - 1) % 4, (square - 1) // 4)             # <<<<<<<<<<<<<<
  *                 result += abs(current_pos[0] - correct_pos[0])
  *                 result += abs(current_pos[1] - correct_pos[1])
  */
-      __pyx_t_4 = __Pyx_PyInt_SubtractObjC(__pyx_v_square, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyInt_SubtractObjC(__pyx_v_square, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_3 = __Pyx_PyInt_RemainderObjC(__pyx_t_4, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_RemainderObjC(__pyx_t_4, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyInt_SubtractObjC(__pyx_v_square, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyInt_SubtractObjC(__pyx_v_square, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_2 = __Pyx_PyInt_FloorDivideObjC(__pyx_t_4, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyInt_FloorDivideObjC(__pyx_t_4, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3);
       PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3);
@@ -2444,63 +2475,63 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
       __Pyx_XDECREF_SET(__pyx_v_correct_pos, ((PyObject*)__pyx_t_4));
       __pyx_t_4 = 0;
 
-      /* "puzzle_solver/solver.pyx":98
+      /* "puzzle_solver/solver.pyx":100
  *                 current_pos = (i % 4, i // 4)
  *                 correct_pos = ((square - 1) % 4, (square - 1) // 4)
  *                 result += abs(current_pos[0] - correct_pos[0])             # <<<<<<<<<<<<<<
  *                 result += abs(current_pos[1] - correct_pos[1])
  *         return result
  */
-      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_result); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_result); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_current_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_current_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_correct_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_GetItemInt_Tuple(__pyx_v_correct_pos, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = PyNumber_Subtract(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_5 = PyNumber_Subtract(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyNumber_Absolute(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyNumber_Absolute(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = PyNumber_InPlaceAdd(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_5 = PyNumber_InPlaceAdd(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 98, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_t_5); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 100, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_result = __pyx_t_9;
 
-      /* "puzzle_solver/solver.pyx":99
+      /* "puzzle_solver/solver.pyx":101
  *                 correct_pos = ((square - 1) % 4, (square - 1) // 4)
  *                 result += abs(current_pos[0] - correct_pos[0])
  *                 result += abs(current_pos[1] - correct_pos[1])             # <<<<<<<<<<<<<<
  *         return result
  * 
  */
-      __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_result); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyInt_From_int(__pyx_v_result); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_current_pos, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_current_pos, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = __Pyx_GetItemInt_Tuple(__pyx_v_correct_pos, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_GetItemInt_Tuple(__pyx_v_correct_pos, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_Subtract(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyNumber_Absolute(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyNumber_Absolute(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyNumber_InPlaceAdd(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_2 = PyNumber_InPlaceAdd(__pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 99, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_t_2); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_result = __pyx_t_9;
 
-      /* "puzzle_solver/solver.pyx":95
+      /* "puzzle_solver/solver.pyx":97
  *         for i in range(16):
  *             square = squares[i]
  *             if square != 0:             # <<<<<<<<<<<<<<
@@ -2510,7 +2541,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
     }
   }
 
-  /* "puzzle_solver/solver.pyx":100
+  /* "puzzle_solver/solver.pyx":102
  *                 result += abs(current_pos[0] - correct_pos[0])
  *                 result += abs(current_pos[1] - correct_pos[1])
  *         return result             # <<<<<<<<<<<<<<
@@ -2518,13 +2549,13 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
  *     if puzzle == INITIAL_PUZZLE:
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_result); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_result); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "puzzle_solver/solver.pyx":87
+  /* "puzzle_solver/solver.pyx":89
  *         The initial state of the puzzle, represented in 64-bit int.
  *     """
  *     def heuristic(puzzle):             # <<<<<<<<<<<<<<
@@ -2549,7 +2580,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic
   return __pyx_r;
 }
 
-/* "puzzle_solver/solver.pyx":78
+/* "puzzle_solver/solver.pyx":80
  *     return reconstruct_path(parent, INITIAL_PUZZLE)
  * 
  * def solve_puzzle_astar(puzzle):             # <<<<<<<<<<<<<<
@@ -2578,41 +2609,42 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
   PyObject *__pyx_t_5 = NULL;
   PyObject *(*__pyx_t_6)(PyObject *);
   Py_ssize_t __pyx_t_7;
-  PyObject *(*__pyx_t_8)(PyObject *);
-  int __pyx_t_9;
-  PyObject *__pyx_t_10 = NULL;
-  int __pyx_t_11;
-  PyObject *__pyx_t_12 = NULL;
+  Py_UCS4 __pyx_t_8;
+  PyObject *(*__pyx_t_9)(PyObject *);
+  int __pyx_t_10;
+  PyObject *__pyx_t_11 = NULL;
+  int __pyx_t_12;
+  PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("solve_puzzle_astar", 0);
 
-  /* "puzzle_solver/solver.pyx":87
+  /* "puzzle_solver/solver.pyx":89
  *         The initial state of the puzzle, represented in 64-bit int.
  *     """
  *     def heuristic(puzzle):             # <<<<<<<<<<<<<<
  *         cdef unsigned long long puzzle_ctype = puzzle
  *         cdef int result = 0
  */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_18solve_puzzle_astar_1heuristic, 0, __pyx_n_s_solve_puzzle_astar_locals_heuris, NULL, __pyx_n_s_puzzle_solver_solver, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_18solve_puzzle_astar_1heuristic, 0, __pyx_n_s_solve_puzzle_astar_locals_heuris, NULL, __pyx_n_s_puzzle_solver_solver, __pyx_d, ((PyObject *)__pyx_codeobj__2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_heuristic = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "puzzle_solver/solver.pyx":102
+  /* "puzzle_solver/solver.pyx":104
  *         return result
  * 
  *     if puzzle == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
  *         return [puzzle]
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_RichCompare(__pyx_v_puzzle, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_2 = PyObject_RichCompare(__pyx_v_puzzle, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_3) {
 
-    /* "puzzle_solver/solver.pyx":103
+    /* "puzzle_solver/solver.pyx":105
  * 
  *     if puzzle == INITIAL_PUZZLE:
  *         return [puzzle]             # <<<<<<<<<<<<<<
@@ -2620,7 +2652,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
  *     cost = dict()
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
+    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_v_puzzle);
     __Pyx_GIVEREF(__pyx_v_puzzle);
@@ -2629,7 +2661,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
     __pyx_t_2 = 0;
     goto __pyx_L0;
 
-    /* "puzzle_solver/solver.pyx":102
+    /* "puzzle_solver/solver.pyx":104
  *         return result
  * 
  *     if puzzle == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
@@ -2638,79 +2670,79 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
  */
   }
 
-  /* "puzzle_solver/solver.pyx":105
+  /* "puzzle_solver/solver.pyx":107
  *         return [puzzle]
  * 
  *     cost = dict()             # <<<<<<<<<<<<<<
  *     h_value = dict()
  *     parent = dict()
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_cost = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":106
+  /* "puzzle_solver/solver.pyx":108
  * 
  *     cost = dict()
  *     h_value = dict()             # <<<<<<<<<<<<<<
  *     parent = dict()
  *     cost[puzzle] = 0
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_h_value = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":107
+  /* "puzzle_solver/solver.pyx":109
  *     cost = dict()
  *     h_value = dict()
  *     parent = dict()             # <<<<<<<<<<<<<<
  *     cost[puzzle] = 0
  *     h_value[puzzle] = heuristic(puzzle)
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_parent = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":108
+  /* "puzzle_solver/solver.pyx":110
  *     h_value = dict()
  *     parent = dict()
  *     cost[puzzle] = 0             # <<<<<<<<<<<<<<
  *     h_value[puzzle] = heuristic(puzzle)
  *     visit_queue = [(cost[puzzle] + h_value[puzzle], puzzle)]
  */
-  if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_puzzle, __pyx_int_0) < 0)) __PYX_ERR(0, 108, __pyx_L1_error)
+  if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_puzzle, __pyx_int_0) < 0)) __PYX_ERR(0, 110, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":109
+  /* "puzzle_solver/solver.pyx":111
  *     parent = dict()
  *     cost[puzzle] = 0
  *     h_value[puzzle] = heuristic(puzzle)             # <<<<<<<<<<<<<<
  *     visit_queue = [(cost[puzzle] + h_value[puzzle], puzzle)]
  *     parent[puzzle] = puzzle
  */
-  __pyx_t_2 = __pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic(__pyx_v_heuristic, __pyx_v_puzzle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_t_2 = __pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic(__pyx_v_heuristic, __pyx_v_puzzle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (unlikely(PyDict_SetItem(__pyx_v_h_value, __pyx_v_puzzle, __pyx_t_2) < 0)) __PYX_ERR(0, 109, __pyx_L1_error)
+  if (unlikely(PyDict_SetItem(__pyx_v_h_value, __pyx_v_puzzle, __pyx_t_2) < 0)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":110
+  /* "puzzle_solver/solver.pyx":112
  *     cost[puzzle] = 0
  *     h_value[puzzle] = heuristic(puzzle)
  *     visit_queue = [(cost[puzzle] + h_value[puzzle], puzzle)]             # <<<<<<<<<<<<<<
  *     parent[puzzle] = puzzle
  *     visit_count = 0
  */
-  __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_puzzle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_puzzle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_h_value, __pyx_v_puzzle); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_h_value, __pyx_v_puzzle); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4);
@@ -2718,7 +2750,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
   __Pyx_GIVEREF(__pyx_v_puzzle);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_puzzle);
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyList_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_4 = PyList_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_1);
   PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
@@ -2726,16 +2758,16 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
   __pyx_v_visit_queue = ((PyObject*)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "puzzle_solver/solver.pyx":111
+  /* "puzzle_solver/solver.pyx":113
  *     h_value[puzzle] = heuristic(puzzle)
  *     visit_queue = [(cost[puzzle] + h_value[puzzle], puzzle)]
  *     parent[puzzle] = puzzle             # <<<<<<<<<<<<<<
  *     visit_count = 0
  *     while visit_queue:
  */
-  if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_puzzle, __pyx_v_puzzle) < 0)) __PYX_ERR(0, 111, __pyx_L1_error)
+  if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_puzzle, __pyx_v_puzzle) < 0)) __PYX_ERR(0, 113, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":112
+  /* "puzzle_solver/solver.pyx":114
  *     visit_queue = [(cost[puzzle] + h_value[puzzle], puzzle)]
  *     parent[puzzle] = puzzle
  *     visit_count = 0             # <<<<<<<<<<<<<<
@@ -2745,7 +2777,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_visit_count = __pyx_int_0;
 
-  /* "puzzle_solver/solver.pyx":113
+  /* "puzzle_solver/solver.pyx":115
  *     parent[puzzle] = puzzle
  *     visit_count = 0
  *     while visit_queue:             # <<<<<<<<<<<<<<
@@ -2756,26 +2788,26 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
     __pyx_t_3 = (PyList_GET_SIZE(__pyx_v_visit_queue) != 0);
     if (!__pyx_t_3) break;
 
-    /* "puzzle_solver/solver.pyx":114
+    /* "puzzle_solver/solver.pyx":116
  *     visit_count = 0
  *     while visit_queue:
  *         visit_count += 1             # <<<<<<<<<<<<<<
  *         _, here = heappop(visit_queue)
  *         clear_console()
  */
-    __pyx_t_4 = __Pyx_PyInt_AddObjC(__pyx_v_visit_count, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 114, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_AddObjC(__pyx_v_visit_count, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 116, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF_SET(__pyx_v_visit_count, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "puzzle_solver/solver.pyx":115
+    /* "puzzle_solver/solver.pyx":117
  *     while visit_queue:
  *         visit_count += 1
  *         _, here = heappop(visit_queue)             # <<<<<<<<<<<<<<
  *         clear_console()
- *         print(Fore.CYAN)
+ *         print('Current state:')
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_heappop); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_heappop); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_2 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -2789,7 +2821,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
     }
     __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_v_visit_queue) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_visit_queue);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if ((likely(PyTuple_CheckExact(__pyx_t_4))) || (PyList_CheckExact(__pyx_t_4))) {
@@ -2798,7 +2830,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
       if (unlikely(size != 2)) {
         if (size > 2) __Pyx_RaiseTooManyValuesError(2);
         else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-        __PYX_ERR(0, 115, __pyx_L1_error)
+        __PYX_ERR(0, 117, __pyx_L1_error)
       }
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
       if (likely(PyTuple_CheckExact(sequence))) {
@@ -2811,15 +2843,15 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
       __Pyx_INCREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_t_2);
       #else
-      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 117, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __pyx_t_2 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 117, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       #endif
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
       Py_ssize_t index = -1;
-      __pyx_t_5 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L1_error)
+      __pyx_t_5 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 117, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_t_6 = Py_TYPE(__pyx_t_5)->tp_iternext;
@@ -2827,7 +2859,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
       __Pyx_GOTREF(__pyx_t_1);
       index = 1; __pyx_t_2 = __pyx_t_6(__pyx_t_5); if (unlikely(!__pyx_t_2)) goto __pyx_L6_unpacking_failed;
       __Pyx_GOTREF(__pyx_t_2);
-      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 115, __pyx_L1_error)
+      if (__Pyx_IternextUnpackEndCheck(__pyx_t_6(__pyx_t_5), 2) < 0) __PYX_ERR(0, 117, __pyx_L1_error)
       __pyx_t_6 = NULL;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       goto __pyx_L7_unpacking_done;
@@ -2835,7 +2867,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_t_6 = NULL;
       if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-      __PYX_ERR(0, 115, __pyx_L1_error)
+      __PYX_ERR(0, 117, __pyx_L1_error)
       __pyx_L7_unpacking_done:;
     }
     __Pyx_XDECREF_SET(__pyx_v__, __pyx_t_1);
@@ -2843,14 +2875,14 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
     __Pyx_XDECREF_SET(__pyx_v_here, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "puzzle_solver/solver.pyx":116
+    /* "puzzle_solver/solver.pyx":118
  *         visit_count += 1
  *         _, here = heappop(visit_queue)
  *         clear_console()             # <<<<<<<<<<<<<<
- *         print(Fore.CYAN)
- *         print_puzzle(here)
+ *         print('Current state:')
+ *         print(Fore.CYAN, end='')
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_clear_console); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_clear_console); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -2864,91 +2896,167 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
     }
     __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 116, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "puzzle_solver/solver.pyx":117
- *         _, here = heappop(visit_queue)
- *         clear_console()
- *         print(Fore.CYAN)             # <<<<<<<<<<<<<<
- *         print_puzzle(here)
- *         print(Style.RESET_ALL)
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_Fore); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_CYAN); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 117, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-    /* "puzzle_solver/solver.pyx":118
- *         clear_console()
- *         print(Fore.CYAN)
- *         print_puzzle(here)             # <<<<<<<<<<<<<<
- *         print(Style.RESET_ALL)
- *         current_cost = cost[here]
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_print_puzzle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_1)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_1);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-      }
-    }
-    __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_v_here) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_here);
-    __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 118, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
     /* "puzzle_solver/solver.pyx":119
- *         print(Fore.CYAN)
+ *         _, here = heappop(visit_queue)
+ *         clear_console()
+ *         print('Current state:')             # <<<<<<<<<<<<<<
+ *         print(Fore.CYAN, end='')
  *         print_puzzle(here)
- *         print(Style.RESET_ALL)             # <<<<<<<<<<<<<<
+ */
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+    /* "puzzle_solver/solver.pyx":120
+ *         clear_console()
+ *         print('Current state:')
+ *         print(Fore.CYAN, end='')             # <<<<<<<<<<<<<<
+ *         print_puzzle(here)
+ *         print(Style.RESET_ALL, end='')
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_Fore); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_CYAN); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
+    __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_end, __pyx_kp_u__4) < 0) __PYX_ERR(0, 120, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "puzzle_solver/solver.pyx":121
+ *         print('Current state:')
+ *         print(Fore.CYAN, end='')
+ *         print_puzzle(here)             # <<<<<<<<<<<<<<
+ *         print(Style.RESET_ALL, end='')
+ *         print('heuristic_value = %d, cost = %d' % (h_value[here], cost[here]))
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_print_puzzle); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_v_here) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_here);
+    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "puzzle_solver/solver.pyx":122
+ *         print(Fore.CYAN, end='')
+ *         print_puzzle(here)
+ *         print(Style.RESET_ALL, end='')             # <<<<<<<<<<<<<<
+ *         print('heuristic_value = %d, cost = %d' % (h_value[here], cost[here]))
+ *         current_cost = cost[here]
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_Style); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_RESET_ALL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_2);
+    __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_end, __pyx_kp_u__4) < 0) __PYX_ERR(0, 122, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+    /* "puzzle_solver/solver.pyx":123
+ *         print_puzzle(here)
+ *         print(Style.RESET_ALL, end='')
+ *         print('heuristic_value = %d, cost = %d' % (h_value[here], cost[here]))             # <<<<<<<<<<<<<<
  *         current_cost = cost[here]
  *         next_states = next_moves(here)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_Style); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_RESET_ALL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_7 = 0;
+    __pyx_t_8 = 127;
+    __Pyx_INCREF(__pyx_kp_u_heuristic_value);
+    __pyx_t_7 += 18;
+    __Pyx_GIVEREF(__pyx_kp_u_heuristic_value);
+    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_kp_u_heuristic_value);
+    __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_h_value, __pyx_v_here); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = __Pyx_PyObject_Format(__pyx_t_2, __pyx_n_u_d); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_8 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_1) > __pyx_t_8) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_1) : __pyx_t_8;
+    __pyx_t_7 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_1);
+    __pyx_t_1 = 0;
+    __Pyx_INCREF(__pyx_kp_u_cost);
+    __pyx_t_7 += 9;
+    __Pyx_GIVEREF(__pyx_kp_u_cost);
+    PyTuple_SET_ITEM(__pyx_t_4, 2, __pyx_kp_u_cost);
+    __pyx_t_1 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_here); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = __Pyx_PyObject_Format(__pyx_t_1, __pyx_n_u_d); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_8 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_2) > __pyx_t_8) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_2) : __pyx_t_8;
+    __pyx_t_7 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_4, 3, __pyx_t_2);
+    __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyUnicode_Join(__pyx_t_4, 4, __pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "puzzle_solver/solver.pyx":120
- *         print_puzzle(here)
- *         print(Style.RESET_ALL)
+    /* "puzzle_solver/solver.pyx":124
+ *         print(Style.RESET_ALL, end='')
+ *         print('heuristic_value = %d, cost = %d' % (h_value[here], cost[here]))
  *         current_cost = cost[here]             # <<<<<<<<<<<<<<
  *         next_states = next_moves(here)
- *         for next_state in next_states:
+ *         print('Available state(s):')
  */
-    __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_here); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_here); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_XDECREF_SET(__pyx_v_current_cost, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "puzzle_solver/solver.pyx":121
- *         print(Style.RESET_ALL)
+    /* "puzzle_solver/solver.pyx":125
+ *         print('heuristic_value = %d, cost = %d' % (h_value[here], cost[here]))
  *         current_cost = cost[here]
  *         next_states = next_moves(here)             # <<<<<<<<<<<<<<
+ *         print('Available state(s):')
  *         for next_state in next_states:
- *             if next_state not in cost:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_next_moves); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_next_moves); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 125, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __pyx_t_1 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -2962,53 +3070,64 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
     }
     __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_1, __pyx_v_here) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_here);
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 125, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF_SET(__pyx_v_next_states, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "puzzle_solver/solver.pyx":122
+    /* "puzzle_solver/solver.pyx":126
  *         current_cost = cost[here]
  *         next_states = next_moves(here)
+ *         print('Available state(s):')             # <<<<<<<<<<<<<<
+ *         for next_state in next_states:
+ *             if next_state not in cost:
+ */
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+    /* "puzzle_solver/solver.pyx":127
+ *         next_states = next_moves(here)
+ *         print('Available state(s):')
  *         for next_state in next_states:             # <<<<<<<<<<<<<<
  *             if next_state not in cost:
- *                 print_puzzle(next_state)
+ *                 print(Fore.YELLOW, end='')
  */
     if (likely(PyList_CheckExact(__pyx_v_next_states)) || PyTuple_CheckExact(__pyx_v_next_states)) {
       __pyx_t_4 = __pyx_v_next_states; __Pyx_INCREF(__pyx_t_4); __pyx_t_7 = 0;
-      __pyx_t_8 = NULL;
+      __pyx_t_9 = NULL;
     } else {
-      __pyx_t_7 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_next_states); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 122, __pyx_L1_error)
+      __pyx_t_7 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_next_states); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_8 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 122, __pyx_L1_error)
+      __pyx_t_9 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 127, __pyx_L1_error)
     }
     for (;;) {
-      if (likely(!__pyx_t_8)) {
+      if (likely(!__pyx_t_9)) {
         if (likely(PyList_CheckExact(__pyx_t_4))) {
           if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_4)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_2 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 122, __pyx_L1_error)
+          __pyx_t_2 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 127, __pyx_L1_error)
           #else
-          __pyx_t_2 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
+          __pyx_t_2 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           #endif
         } else {
           if (__pyx_t_7 >= PyTuple_GET_SIZE(__pyx_t_4)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 122, __pyx_L1_error)
+          __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_7); __Pyx_INCREF(__pyx_t_2); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 127, __pyx_L1_error)
           #else
-          __pyx_t_2 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
+          __pyx_t_2 = PySequence_ITEM(__pyx_t_4, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           #endif
         }
       } else {
-        __pyx_t_2 = __pyx_t_8(__pyx_t_4);
+        __pyx_t_2 = __pyx_t_9(__pyx_t_4);
         if (unlikely(!__pyx_t_2)) {
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 122, __pyx_L1_error)
+            else __PYX_ERR(0, 127, __pyx_L1_error)
           }
           break;
         }
@@ -3017,267 +3136,326 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
       __Pyx_XDECREF_SET(__pyx_v_next_state, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "puzzle_solver/solver.pyx":123
- *         next_states = next_moves(here)
+      /* "puzzle_solver/solver.pyx":128
+ *         print('Available state(s):')
  *         for next_state in next_states:
  *             if next_state not in cost:             # <<<<<<<<<<<<<<
+ *                 print(Fore.YELLOW, end='')
  *                 print_puzzle(next_state)
- *                 parent[next_state] = here
  */
-      __pyx_t_3 = (__Pyx_PyDict_ContainsTF(__pyx_v_next_state, __pyx_v_cost, Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 123, __pyx_L1_error)
-      __pyx_t_9 = (__pyx_t_3 != 0);
-      if (__pyx_t_9) {
+      __pyx_t_3 = (__Pyx_PyDict_ContainsTF(__pyx_v_next_state, __pyx_v_cost, Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 128, __pyx_L1_error)
+      __pyx_t_10 = (__pyx_t_3 != 0);
+      if (__pyx_t_10) {
 
-        /* "puzzle_solver/solver.pyx":124
+        /* "puzzle_solver/solver.pyx":129
  *         for next_state in next_states:
  *             if next_state not in cost:
- *                 print_puzzle(next_state)             # <<<<<<<<<<<<<<
- *                 parent[next_state] = here
- *                 cost[next_state] = current_cost + 1
+ *                 print(Fore.YELLOW, end='')             # <<<<<<<<<<<<<<
+ *                 print_puzzle(next_state)
+ *                 print(Style.RESET_ALL)
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_print_puzzle); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_Fore); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 129, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_YELLOW); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_5 = NULL;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 129, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_GIVEREF(__pyx_t_1);
+        PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+        __pyx_t_1 = 0;
+        __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_end, __pyx_kp_u__4) < 0) __PYX_ERR(0, 129, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_print, __pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+        /* "puzzle_solver/solver.pyx":130
+ *             if next_state not in cost:
+ *                 print(Fore.YELLOW, end='')
+ *                 print_puzzle(next_state)             # <<<<<<<<<<<<<<
+ *                 print(Style.RESET_ALL)
+ *                 parent[next_state] = here
+ */
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_print_puzzle); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_2 = NULL;
         if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-          __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_1);
-          if (likely(__pyx_t_5)) {
+          __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
+          if (likely(__pyx_t_2)) {
             PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-            __Pyx_INCREF(__pyx_t_5);
+            __Pyx_INCREF(__pyx_t_2);
             __Pyx_INCREF(function);
             __Pyx_DECREF_SET(__pyx_t_1, function);
           }
         }
-        __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_v_next_state) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_next_state);
-        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 124, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_5 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_v_next_state) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_next_state);
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 130, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "puzzle_solver/solver.pyx":125
- *             if next_state not in cost:
+        /* "puzzle_solver/solver.pyx":131
+ *                 print(Fore.YELLOW, end='')
  *                 print_puzzle(next_state)
+ *                 print(Style.RESET_ALL)             # <<<<<<<<<<<<<<
+ *                 parent[next_state] = here
+ *                 cost[next_state] = current_cost + 1
+ */
+        __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_Style); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_RESET_ALL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_print, __pyx_t_1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+        /* "puzzle_solver/solver.pyx":132
+ *                 print_puzzle(next_state)
+ *                 print(Style.RESET_ALL)
  *                 parent[next_state] = here             # <<<<<<<<<<<<<<
  *                 cost[next_state] = current_cost + 1
  *                 h_value[next_state] = heuristic(next_state)
  */
-        if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_next_state, __pyx_v_here) < 0)) __PYX_ERR(0, 125, __pyx_L1_error)
+        if (unlikely(PyDict_SetItem(__pyx_v_parent, __pyx_v_next_state, __pyx_v_here) < 0)) __PYX_ERR(0, 132, __pyx_L1_error)
 
-        /* "puzzle_solver/solver.pyx":126
- *                 print_puzzle(next_state)
+        /* "puzzle_solver/solver.pyx":133
+ *                 print(Style.RESET_ALL)
  *                 parent[next_state] = here
  *                 cost[next_state] = current_cost + 1             # <<<<<<<<<<<<<<
  *                 h_value[next_state] = heuristic(next_state)
  *                 if next_state == INITIAL_PUZZLE:
  */
-        __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_current_cost, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 126, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_next_state, __pyx_t_2) < 0)) __PYX_ERR(0, 126, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_5 = __Pyx_PyInt_AddObjC(__pyx_v_current_cost, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 133, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (unlikely(PyDict_SetItem(__pyx_v_cost, __pyx_v_next_state, __pyx_t_5) < 0)) __PYX_ERR(0, 133, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "puzzle_solver/solver.pyx":127
+        /* "puzzle_solver/solver.pyx":134
  *                 parent[next_state] = here
  *                 cost[next_state] = current_cost + 1
  *                 h_value[next_state] = heuristic(next_state)             # <<<<<<<<<<<<<<
  *                 if next_state == INITIAL_PUZZLE:
- *                     return reconstruct_path(parent, INITIAL_PUZZLE)
+ *                     return (reconstruct_path(parent, INITIAL_PUZZLE),
  */
-        __pyx_t_2 = __pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic(__pyx_v_heuristic, __pyx_v_next_state); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 127, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        if (unlikely(PyDict_SetItem(__pyx_v_h_value, __pyx_v_next_state, __pyx_t_2) < 0)) __PYX_ERR(0, 127, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_t_5 = __pyx_pf_13puzzle_solver_6solver_18solve_puzzle_astar_heuristic(__pyx_v_heuristic, __pyx_v_next_state); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 134, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (unlikely(PyDict_SetItem(__pyx_v_h_value, __pyx_v_next_state, __pyx_t_5) < 0)) __PYX_ERR(0, 134, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "puzzle_solver/solver.pyx":128
+        /* "puzzle_solver/solver.pyx":135
  *                 cost[next_state] = current_cost + 1
  *                 h_value[next_state] = heuristic(next_state)
  *                 if next_state == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
- *                     return reconstruct_path(parent, INITIAL_PUZZLE)
- *                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
+ *                     return (reconstruct_path(parent, INITIAL_PUZZLE),
+ *                             visit_count)
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 128, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_1 = PyObject_RichCompare(__pyx_v_next_state, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(0, 128, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 135, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __pyx_t_1 = PyObject_RichCompare(__pyx_v_next_state, __pyx_t_5, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 135, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_10 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 135, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (__pyx_t_9) {
+        if (__pyx_t_10) {
 
-          /* "puzzle_solver/solver.pyx":129
+          /* "puzzle_solver/solver.pyx":136
  *                 h_value[next_state] = heuristic(next_state)
  *                 if next_state == INITIAL_PUZZLE:
- *                     return reconstruct_path(parent, INITIAL_PUZZLE)             # <<<<<<<<<<<<<<
+ *                     return (reconstruct_path(parent, INITIAL_PUZZLE),             # <<<<<<<<<<<<<<
+ *                             visit_count)
  *                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
- *                                        next_state))
  */
           __Pyx_XDECREF(__pyx_r);
-          __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_reconstruct_path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 129, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_2);
-          __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_reconstruct_path); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 136, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_10 = NULL;
-          __pyx_t_11 = 0;
-          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-            __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_2);
-            if (likely(__pyx_t_10)) {
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-              __Pyx_INCREF(__pyx_t_10);
+          __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_INITIAL_PUZZLE); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 136, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __pyx_t_11 = NULL;
+          __pyx_t_12 = 0;
+          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
+            __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_5);
+            if (likely(__pyx_t_11)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+              __Pyx_INCREF(__pyx_t_11);
               __Pyx_INCREF(function);
-              __Pyx_DECREF_SET(__pyx_t_2, function);
-              __pyx_t_11 = 1;
+              __Pyx_DECREF_SET(__pyx_t_5, function);
+              __pyx_t_12 = 1;
             }
           }
           #if CYTHON_FAST_PYCALL
-          if (PyFunction_Check(__pyx_t_2)) {
-            PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_parent, __pyx_t_5};
-            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
-            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+          if (PyFunction_Check(__pyx_t_5)) {
+            PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_parent, __pyx_t_2};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           } else
           #endif
           #if CYTHON_FAST_PYCCALL
-          if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-            PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_parent, __pyx_t_5};
-            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
-            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
+            PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_parent, __pyx_t_2};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+            __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           } else
           #endif
           {
-            __pyx_t_12 = PyTuple_New(2+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 129, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_12);
-            if (__pyx_t_10) {
-              __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
+            __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 136, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_13);
+            if (__pyx_t_11) {
+              __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
             }
             __Pyx_INCREF(__pyx_v_parent);
             __Pyx_GIVEREF(__pyx_v_parent);
-            PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_11, __pyx_v_parent);
-            __Pyx_GIVEREF(__pyx_t_5);
-            PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_11, __pyx_t_5);
-            __pyx_t_5 = 0;
-            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
+            PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_v_parent);
+            __Pyx_GIVEREF(__pyx_t_2);
+            PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_t_2);
+            __pyx_t_2 = 0;
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           }
-          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_r = __pyx_t_1;
+          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+
+          /* "puzzle_solver/solver.pyx":137
+ *                 if next_state == INITIAL_PUZZLE:
+ *                     return (reconstruct_path(parent, INITIAL_PUZZLE),
+ *                             visit_count)             # <<<<<<<<<<<<<<
+ *                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
+ *                                        next_state))
+ */
+          __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 136, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_5);
+          __Pyx_GIVEREF(__pyx_t_1);
+          PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
+          __Pyx_INCREF(__pyx_v_visit_count);
+          __Pyx_GIVEREF(__pyx_v_visit_count);
+          PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_v_visit_count);
           __pyx_t_1 = 0;
+          __pyx_r = __pyx_t_5;
+          __pyx_t_5 = 0;
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           goto __pyx_L0;
 
-          /* "puzzle_solver/solver.pyx":128
+          /* "puzzle_solver/solver.pyx":135
  *                 cost[next_state] = current_cost + 1
  *                 h_value[next_state] = heuristic(next_state)
  *                 if next_state == INITIAL_PUZZLE:             # <<<<<<<<<<<<<<
- *                     return reconstruct_path(parent, INITIAL_PUZZLE)
- *                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
+ *                     return (reconstruct_path(parent, INITIAL_PUZZLE),
+ *                             visit_count)
  */
         }
 
-        /* "puzzle_solver/solver.pyx":130
- *                 if next_state == INITIAL_PUZZLE:
- *                     return reconstruct_path(parent, INITIAL_PUZZLE)
+        /* "puzzle_solver/solver.pyx":138
+ *                     return (reconstruct_path(parent, INITIAL_PUZZLE),
+ *                             visit_count)
  *                 heappush(visit_queue, (cost[next_state] + h_value[next_state],             # <<<<<<<<<<<<<<
  *                                        next_state))
  * 
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_heappush); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 130, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_heappush); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_13 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_next_state); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 138, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __pyx_t_2 = __Pyx_PyDict_GetItem(__pyx_v_h_value, __pyx_v_next_state); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_12 = __Pyx_PyDict_GetItem(__pyx_v_cost, __pyx_v_next_state); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 130, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_12);
-        __pyx_t_5 = __Pyx_PyDict_GetItem(__pyx_v_h_value, __pyx_v_next_state); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 130, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_10 = PyNumber_Add(__pyx_t_12, __pyx_t_5); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 130, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_10);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_11 = PyNumber_Add(__pyx_t_13, __pyx_t_2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 138, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "puzzle_solver/solver.pyx":131
- *                     return reconstruct_path(parent, INITIAL_PUZZLE)
+        /* "puzzle_solver/solver.pyx":139
+ *                             visit_count)
  *                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
  *                                        next_state))             # <<<<<<<<<<<<<<
  * 
  *     return None
  */
-        __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 130, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_GIVEREF(__pyx_t_10);
-        PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_10);
+        __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_GIVEREF(__pyx_t_11);
+        PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_11);
         __Pyx_INCREF(__pyx_v_next_state);
         __Pyx_GIVEREF(__pyx_v_next_state);
-        PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_v_next_state);
-        __pyx_t_10 = 0;
-        __pyx_t_10 = NULL;
+        PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_v_next_state);
         __pyx_t_11 = 0;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-          __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_2);
-          if (likely(__pyx_t_10)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-            __Pyx_INCREF(__pyx_t_10);
+        __pyx_t_11 = NULL;
+        __pyx_t_12 = 0;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
+          __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_1);
+          if (likely(__pyx_t_11)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+            __Pyx_INCREF(__pyx_t_11);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_2, function);
-            __pyx_t_11 = 1;
+            __Pyx_DECREF_SET(__pyx_t_1, function);
+            __pyx_t_12 = 1;
           }
         }
         #if CYTHON_FAST_PYCALL
-        if (PyFunction_Check(__pyx_t_2)) {
-          PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_visit_queue, __pyx_t_5};
-          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        if (PyFunction_Check(__pyx_t_1)) {
+          PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_visit_queue, __pyx_t_2};
+          __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 138, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+          __Pyx_GOTREF(__pyx_t_5);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         } else
         #endif
         #if CYTHON_FAST_PYCCALL
-        if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-          PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_visit_queue, __pyx_t_5};
-          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
-          __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+          PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_visit_queue, __pyx_t_2};
+          __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_12, 2+__pyx_t_12); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 138, __pyx_L1_error)
+          __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+          __Pyx_GOTREF(__pyx_t_5);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         } else
         #endif
         {
-          __pyx_t_12 = PyTuple_New(2+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 130, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_12);
-          if (__pyx_t_10) {
-            __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
+          __pyx_t_13 = PyTuple_New(2+__pyx_t_12); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 138, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_13);
+          if (__pyx_t_11) {
+            __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
           }
           __Pyx_INCREF(__pyx_v_visit_queue);
           __Pyx_GIVEREF(__pyx_v_visit_queue);
-          PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_11, __pyx_v_visit_queue);
-          __Pyx_GIVEREF(__pyx_t_5);
-          PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_11, __pyx_t_5);
-          __pyx_t_5 = 0;
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+          PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_12, __pyx_v_visit_queue);
+          __Pyx_GIVEREF(__pyx_t_2);
+          PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_12, __pyx_t_2);
+          __pyx_t_2 = 0;
+          __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 138, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_5);
+          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         }
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-        /* "puzzle_solver/solver.pyx":123
- *         next_states = next_moves(here)
+        /* "puzzle_solver/solver.pyx":128
+ *         print('Available state(s):')
  *         for next_state in next_states:
  *             if next_state not in cost:             # <<<<<<<<<<<<<<
+ *                 print(Fore.YELLOW, end='')
  *                 print_puzzle(next_state)
- *                 parent[next_state] = here
  */
       }
 
-      /* "puzzle_solver/solver.pyx":122
- *         current_cost = cost[here]
+      /* "puzzle_solver/solver.pyx":127
  *         next_states = next_moves(here)
+ *         print('Available state(s):')
  *         for next_state in next_states:             # <<<<<<<<<<<<<<
  *             if next_state not in cost:
- *                 print_puzzle(next_state)
+ *                 print(Fore.YELLOW, end='')
  */
     }
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   }
 
-  /* "puzzle_solver/solver.pyx":133
+  /* "puzzle_solver/solver.pyx":141
  *                                        next_state))
  * 
  *     return None             # <<<<<<<<<<<<<<
@@ -3286,7 +3464,7 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
 
-  /* "puzzle_solver/solver.pyx":78
+  /* "puzzle_solver/solver.pyx":80
  *     return reconstruct_path(parent, INITIAL_PUZZLE)
  * 
  * def solve_puzzle_astar(puzzle):             # <<<<<<<<<<<<<<
@@ -3300,8 +3478,8 @@ static PyObject *__pyx_pf_13puzzle_solver_6solver_4solve_puzzle_astar(CYTHON_UNU
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_13);
   __Pyx_AddTraceback("puzzle_solver.solver.solve_puzzle_astar", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -3692,7 +3870,9 @@ static struct PyModuleDef __pyx_moduledef = {
 #endif
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
+  {&__pyx_kp_u_Available_state_s, __pyx_k_Available_state_s, sizeof(__pyx_k_Available_state_s), 0, 1, 0, 0},
   {&__pyx_n_s_CYAN, __pyx_k_CYAN, sizeof(__pyx_k_CYAN), 0, 0, 1, 1},
+  {&__pyx_kp_u_Current_state, __pyx_k_Current_state, sizeof(__pyx_k_Current_state), 0, 1, 0, 0},
   {&__pyx_n_s_Fore, __pyx_k_Fore, sizeof(__pyx_k_Fore), 0, 0, 1, 1},
   {&__pyx_n_s_INITIAL_PUZZLE, __pyx_k_INITIAL_PUZZLE, sizeof(__pyx_k_INITIAL_PUZZLE), 0, 0, 1, 1},
   {&__pyx_n_s_IndexError, __pyx_k_IndexError, sizeof(__pyx_k_IndexError), 0, 0, 1, 1},
@@ -3700,17 +3880,22 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_RESET_ALL, __pyx_k_RESET_ALL, sizeof(__pyx_k_RESET_ALL), 0, 0, 1, 1},
   {&__pyx_n_s_Style, __pyx_k_Style, sizeof(__pyx_k_Style), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
-  {&__pyx_n_s__7, __pyx_k__7, sizeof(__pyx_k__7), 0, 0, 1, 1},
+  {&__pyx_n_s_YELLOW, __pyx_k_YELLOW, sizeof(__pyx_k_YELLOW), 0, 0, 1, 1},
+  {&__pyx_n_s__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 1, 1},
+  {&__pyx_kp_u__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 1, 0, 0},
   {&__pyx_n_s_append, __pyx_k_append, sizeof(__pyx_k_append), 0, 0, 1, 1},
   {&__pyx_n_s_clear_console, __pyx_k_clear_console, sizeof(__pyx_k_clear_console), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_collections, __pyx_k_collections, sizeof(__pyx_k_collections), 0, 0, 1, 1},
   {&__pyx_n_s_colorama, __pyx_k_colorama, sizeof(__pyx_k_colorama), 0, 0, 1, 1},
   {&__pyx_n_s_correct_pos, __pyx_k_correct_pos, sizeof(__pyx_k_correct_pos), 0, 0, 1, 1},
-  {&__pyx_n_s_cost, __pyx_k_cost, sizeof(__pyx_k_cost), 0, 0, 1, 1},
+  {&__pyx_kp_u_cost, __pyx_k_cost, sizeof(__pyx_k_cost), 0, 1, 0, 0},
+  {&__pyx_n_s_cost_2, __pyx_k_cost_2, sizeof(__pyx_k_cost_2), 0, 0, 1, 1},
   {&__pyx_n_s_current_cost, __pyx_k_current_cost, sizeof(__pyx_k_current_cost), 0, 0, 1, 1},
   {&__pyx_n_s_current_pos, __pyx_k_current_pos, sizeof(__pyx_k_current_pos), 0, 0, 1, 1},
+  {&__pyx_n_u_d, __pyx_k_d, sizeof(__pyx_k_d), 0, 1, 0, 1},
   {&__pyx_n_s_deque, __pyx_k_deque, sizeof(__pyx_k_deque), 0, 0, 1, 1},
+  {&__pyx_n_s_end, __pyx_k_end, sizeof(__pyx_k_end), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
   {&__pyx_n_s_finish, __pyx_k_finish, sizeof(__pyx_k_finish), 0, 0, 1, 1},
   {&__pyx_n_s_h_value, __pyx_k_h_value, sizeof(__pyx_k_h_value), 0, 0, 1, 1},
@@ -3720,9 +3905,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_heapq, __pyx_k_heapq, sizeof(__pyx_k_heapq), 0, 0, 1, 1},
   {&__pyx_n_s_here, __pyx_k_here, sizeof(__pyx_k_here), 0, 0, 1, 1},
   {&__pyx_n_s_heuristic, __pyx_k_heuristic, sizeof(__pyx_k_heuristic), 0, 0, 1, 1},
+  {&__pyx_kp_u_heuristic_value, __pyx_k_heuristic_value, sizeof(__pyx_k_heuristic_value), 0, 1, 0, 0},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_inf, __pyx_k_inf, sizeof(__pyx_k_inf), 0, 0, 1, 1},
+  {&__pyx_n_s_init, __pyx_k_init, sizeof(__pyx_k_init), 0, 0, 1, 1},
   {&__pyx_n_s_int64_to_list, __pyx_k_int64_to_list, sizeof(__pyx_k_int64_to_list), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_math, __pyx_k_math, sizeof(__pyx_k_math), 0, 0, 1, 1},
@@ -3757,8 +3944,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 117, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 93, __pyx_L1_error)
+  __pyx_builtin_print = __Pyx_GetBuiltinName(__pyx_n_s_print); if (!__pyx_builtin_print) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 95, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 81, __pyx_L1_error)
   __pyx_builtin_OverflowError = __Pyx_GetBuiltinName(__pyx_n_s_OverflowError); if (!__pyx_builtin_OverflowError) __PYX_ERR(1, 81, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 84, __pyx_L1_error)
@@ -3772,53 +3959,75 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "puzzle_solver/solver.pyx":87
+  /* "puzzle_solver/solver.pyx":89
  *         The initial state of the puzzle, represented in 64-bit int.
  *     """
  *     def heuristic(puzzle):             # <<<<<<<<<<<<<<
  *         cdef unsigned long long puzzle_ctype = puzzle
  *         cdef int result = 0
  */
-  __pyx_tuple_ = PyTuple_Pack(8, __pyx_n_s_puzzle, __pyx_n_s_puzzle_ctype, __pyx_n_s_result, __pyx_n_s_i, __pyx_n_s_squares, __pyx_n_s_square, __pyx_n_s_current_pos, __pyx_n_s_correct_pos); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(8, __pyx_n_s_puzzle, __pyx_n_s_puzzle_ctype, __pyx_n_s_result, __pyx_n_s_i, __pyx_n_s_squares, __pyx_n_s_square, __pyx_n_s_current_pos, __pyx_n_s_correct_pos); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 89, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(1, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_heuristic, 87, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 87, __pyx_L1_error)
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(1, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_heuristic, 89, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 89, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":19
- * from puzzle_solver.visualizer import print_puzzle, clear_console
+  /* "puzzle_solver/solver.pyx":119
+ *         _, here = heappop(visit_queue)
+ *         clear_console()
+ *         print('Current state:')             # <<<<<<<<<<<<<<
+ *         print(Fore.CYAN, end='')
+ *         print_puzzle(here)
+ */
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_u_Current_state); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
+
+  /* "puzzle_solver/solver.pyx":126
+ *         current_cost = cost[here]
+ *         next_states = next_moves(here)
+ *         print('Available state(s):')             # <<<<<<<<<<<<<<
+ *         for next_state in next_states:
+ *             if next_state not in cost:
+ */
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_Available_state_s); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 126, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__5);
+  __Pyx_GIVEREF(__pyx_tuple__5);
+
+  /* "puzzle_solver/solver.pyx":21
+ * init()
  * 
  * def reconstruct_path(tree, finish):             # <<<<<<<<<<<<<<
  *     """
  *     reconstruct_path(tree) -- reconstruct path from BFS spanning tree
  */
-  __pyx_tuple__3 = PyTuple_Pack(4, __pyx_n_s_tree, __pyx_n_s_finish, __pyx_n_s_path, __pyx_n_s_here); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 19, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_reconstruct_path, 19, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(4, __pyx_n_s_tree, __pyx_n_s_finish, __pyx_n_s_path, __pyx_n_s_here); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(2, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_reconstruct_path, 21, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) __PYX_ERR(0, 21, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":40
+  /* "puzzle_solver/solver.pyx":42
  *     return path
  * 
  * def solve_puzzle_bfs(puzzle):             # <<<<<<<<<<<<<<
  *     """
  *     solve_puzzle_bfs(puzzle) -- solve the puzzle with BFS
  */
-  __pyx_tuple__5 = PyTuple_Pack(9, __pyx_n_s_puzzle, __pyx_n_s_cost, __pyx_n_s_parent, __pyx_n_s_visit_queue, __pyx_n_s_here, __pyx_n_s_current_cost, __pyx_n_s_next_states, __pyx_n_s_solved, __pyx_n_s_next_state); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(1, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__5, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_solve_puzzle_bfs, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(9, __pyx_n_s_puzzle, __pyx_n_s_cost_2, __pyx_n_s_parent, __pyx_n_s_visit_queue, __pyx_n_s_here, __pyx_n_s_current_cost, __pyx_n_s_next_states, __pyx_n_s_solved, __pyx_n_s_next_state); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(1, 0, 9, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_solve_puzzle_bfs, 42, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 42, __pyx_L1_error)
 
-  /* "puzzle_solver/solver.pyx":78
+  /* "puzzle_solver/solver.pyx":80
  *     return reconstruct_path(parent, INITIAL_PUZZLE)
  * 
  * def solve_puzzle_astar(puzzle):             # <<<<<<<<<<<<<<
  *     """
  *     solve_puzzle_astar(puzzle) -- solve the puzzle with A* algorithm
  */
-  __pyx_tuple__8 = PyTuple_Pack(13, __pyx_n_s_puzzle, __pyx_n_s_heuristic, __pyx_n_s_heuristic, __pyx_n_s_cost, __pyx_n_s_h_value, __pyx_n_s_parent, __pyx_n_s_visit_queue, __pyx_n_s_visit_count, __pyx_n_s__7, __pyx_n_s_here, __pyx_n_s_current_cost, __pyx_n_s_next_states, __pyx_n_s_next_state); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__8);
-  __Pyx_GIVEREF(__pyx_tuple__8);
-  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(1, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__8, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_solve_puzzle_astar, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_tuple__11 = PyTuple_Pack(13, __pyx_n_s_puzzle, __pyx_n_s_heuristic, __pyx_n_s_heuristic, __pyx_n_s_cost_2, __pyx_n_s_h_value, __pyx_n_s_parent, __pyx_n_s_visit_queue, __pyx_n_s_visit_count, __pyx_n_s__10, __pyx_n_s_here, __pyx_n_s_current_cost, __pyx_n_s_next_states, __pyx_n_s_next_state); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_codeobj__12 = (PyObject*)__Pyx_PyCode_New(1, 0, 13, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__11, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_solver_pyx, __pyx_n_s_solve_puzzle_astar, 80, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__12)) __PYX_ERR(0, 80, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -4102,7 +4311,7 @@ if (!__Pyx_RefNanny) {
  * """
  * 
  * from collections import deque             # <<<<<<<<<<<<<<
- * from colorama import Fore, Style
+ * from colorama import init, Fore, Style
  * from heapq import heapify, heappush, heappop
  */
   __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
@@ -4122,20 +4331,27 @@ if (!__Pyx_RefNanny) {
   /* "puzzle_solver/solver.pyx":9
  * 
  * from collections import deque
- * from colorama import Fore, Style             # <<<<<<<<<<<<<<
+ * from colorama import init, Fore, Style             # <<<<<<<<<<<<<<
  * from heapq import heapify, heappush, heappop
  * from math import inf
  */
-  __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(__pyx_n_s_init);
+  __Pyx_GIVEREF(__pyx_n_s_init);
+  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_init);
   __Pyx_INCREF(__pyx_n_s_Fore);
   __Pyx_GIVEREF(__pyx_n_s_Fore);
-  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_Fore);
+  PyList_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_Fore);
   __Pyx_INCREF(__pyx_n_s_Style);
   __Pyx_GIVEREF(__pyx_n_s_Style);
-  PyList_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_Style);
+  PyList_SET_ITEM(__pyx_t_2, 2, __pyx_n_s_Style);
   __pyx_t_1 = __Pyx_Import(__pyx_n_s_colorama, __pyx_t_2, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_init); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 9, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_init, __pyx_t_2) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_Fore); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -4149,7 +4365,7 @@ if (!__Pyx_RefNanny) {
 
   /* "puzzle_solver/solver.pyx":10
  * from collections import deque
- * from colorama import Fore, Style
+ * from colorama import init, Fore, Style
  * from heapq import heapify, heappush, heappop             # <<<<<<<<<<<<<<
  * from math import inf
  * from puzzle_solver.puzzle import (
@@ -4183,7 +4399,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "puzzle_solver/solver.pyx":11
- * from colorama import Fore, Style
+ * from colorama import init, Fore, Style
  * from heapq import heapify, heappush, heappop
  * from math import inf             # <<<<<<<<<<<<<<
  * from puzzle_solver.puzzle import (
@@ -4251,7 +4467,7 @@ if (!__Pyx_RefNanny) {
  * )
  * from puzzle_solver.visualizer import print_puzzle, clear_console             # <<<<<<<<<<<<<<
  * 
- * def reconstruct_path(tree, finish):
+ * init()
  */
   __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -4277,48 +4493,62 @@ if (!__Pyx_RefNanny) {
   /* "puzzle_solver/solver.pyx":19
  * from puzzle_solver.visualizer import print_puzzle, clear_console
  * 
+ * init()             # <<<<<<<<<<<<<<
+ * 
+ * def reconstruct_path(tree, finish):
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_init); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "puzzle_solver/solver.pyx":21
+ * init()
+ * 
  * def reconstruct_path(tree, finish):             # <<<<<<<<<<<<<<
  *     """
  *     reconstruct_path(tree) -- reconstruct path from BFS spanning tree
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_1reconstruct_path, NULL, __pyx_n_s_puzzle_solver_solver); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reconstruct_path, __pyx_t_1) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_1reconstruct_path, NULL, __pyx_n_s_puzzle_solver_solver); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_reconstruct_path, __pyx_t_2) < 0) __PYX_ERR(0, 21, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":40
+  /* "puzzle_solver/solver.pyx":42
  *     return path
  * 
  * def solve_puzzle_bfs(puzzle):             # <<<<<<<<<<<<<<
  *     """
  *     solve_puzzle_bfs(puzzle) -- solve the puzzle with BFS
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_3solve_puzzle_bfs, NULL, __pyx_n_s_puzzle_solver_solver); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_solve_puzzle_bfs, __pyx_t_1) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_3solve_puzzle_bfs, NULL, __pyx_n_s_puzzle_solver_solver); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_solve_puzzle_bfs, __pyx_t_2) < 0) __PYX_ERR(0, 42, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "puzzle_solver/solver.pyx":78
+  /* "puzzle_solver/solver.pyx":80
  *     return reconstruct_path(parent, INITIAL_PUZZLE)
  * 
  * def solve_puzzle_astar(puzzle):             # <<<<<<<<<<<<<<
  *     """
  *     solve_puzzle_astar(puzzle) -- solve the puzzle with A* algorithm
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_5solve_puzzle_astar, NULL, __pyx_n_s_puzzle_solver_solver); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_solve_puzzle_astar, __pyx_t_1) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_13puzzle_solver_6solver_5solve_puzzle_astar, NULL, __pyx_n_s_puzzle_solver_solver); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_solve_puzzle_astar, __pyx_t_2) < 0) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "puzzle_solver/solver.pyx":1
  * """             # <<<<<<<<<<<<<<
  * solver.py
  * =========
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "carray.from_py":77
  * 
@@ -6455,6 +6685,104 @@ static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected) {
         return __Pyx_IterFinish();
     }
     return 0;
+}
+
+/* PyObjectFormat */
+#if CYTHON_USE_UNICODE_WRITER
+static PyObject* __Pyx_PyObject_Format(PyObject* obj, PyObject* format_spec) {
+    int ret;
+    _PyUnicodeWriter writer;
+    if (likely(PyFloat_CheckExact(obj))) {
+#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX < 0x03040000
+        _PyUnicodeWriter_Init(&writer, 0);
+#else
+        _PyUnicodeWriter_Init(&writer);
+#endif
+        ret = _PyFloat_FormatAdvancedWriter(
+            &writer,
+            obj,
+            format_spec, 0, PyUnicode_GET_LENGTH(format_spec));
+    } else if (likely(PyLong_CheckExact(obj))) {
+#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX < 0x03040000
+        _PyUnicodeWriter_Init(&writer, 0);
+#else
+        _PyUnicodeWriter_Init(&writer);
+#endif
+        ret = _PyLong_FormatAdvancedWriter(
+            &writer,
+            obj,
+            format_spec, 0, PyUnicode_GET_LENGTH(format_spec));
+    } else {
+        return PyObject_Format(obj, format_spec);
+    }
+    if (unlikely(ret == -1)) {
+        _PyUnicodeWriter_Dealloc(&writer);
+        return NULL;
+    }
+    return _PyUnicodeWriter_Finish(&writer);
+}
+#endif
+
+/* JoinPyUnicode */
+static PyObject* __Pyx_PyUnicode_Join(PyObject* value_tuple, Py_ssize_t value_count, Py_ssize_t result_ulength,
+                                      CYTHON_UNUSED Py_UCS4 max_char) {
+#if CYTHON_USE_UNICODE_INTERNALS && CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    PyObject *result_uval;
+    int result_ukind;
+    Py_ssize_t i, char_pos;
+    void *result_udata;
+#if CYTHON_PEP393_ENABLED
+    result_uval = PyUnicode_New(result_ulength, max_char);
+    if (unlikely(!result_uval)) return NULL;
+    result_ukind = (max_char <= 255) ? PyUnicode_1BYTE_KIND : (max_char <= 65535) ? PyUnicode_2BYTE_KIND : PyUnicode_4BYTE_KIND;
+    result_udata = PyUnicode_DATA(result_uval);
+#else
+    result_uval = PyUnicode_FromUnicode(NULL, result_ulength);
+    if (unlikely(!result_uval)) return NULL;
+    result_ukind = sizeof(Py_UNICODE);
+    result_udata = PyUnicode_AS_UNICODE(result_uval);
+#endif
+    char_pos = 0;
+    for (i=0; i < value_count; i++) {
+        int ukind;
+        Py_ssize_t ulength;
+        void *udata;
+        PyObject *uval = PyTuple_GET_ITEM(value_tuple, i);
+        if (unlikely(__Pyx_PyUnicode_READY(uval)))
+            goto bad;
+        ulength = __Pyx_PyUnicode_GET_LENGTH(uval);
+        if (unlikely(!ulength))
+            continue;
+        if (unlikely(char_pos + ulength < 0))
+            goto overflow;
+        ukind = __Pyx_PyUnicode_KIND(uval);
+        udata = __Pyx_PyUnicode_DATA(uval);
+        if (!CYTHON_PEP393_ENABLED || ukind == result_ukind) {
+            memcpy((char *)result_udata + char_pos * result_ukind, udata, (size_t) (ulength * result_ukind));
+        } else {
+            #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030300F0 || defined(_PyUnicode_FastCopyCharacters)
+            _PyUnicode_FastCopyCharacters(result_uval, char_pos, uval, 0, ulength);
+            #else
+            Py_ssize_t j;
+            for (j=0; j < ulength; j++) {
+                Py_UCS4 uchar = __Pyx_PyUnicode_READ(ukind, udata, j);
+                __Pyx_PyUnicode_WRITE(result_ukind, result_udata, char_pos+j, uchar);
+            }
+            #endif
+        }
+        char_pos += ulength;
+    }
+    return result_uval;
+overflow:
+    PyErr_SetString(PyExc_OverflowError, "join() result is too long for a Python string");
+bad:
+    Py_DECREF(result_uval);
+    return NULL;
+#else
+    result_ulength++;
+    value_count++;
+    return PyUnicode_Join(__pyx_empty_unicode, value_tuple);
+#endif
 }
 
 /* GetTopmostException */

@@ -6,7 +6,7 @@ A module for solving 16-puzzle using graph search algorithms.
 """
 
 from collections import deque
-from colorama import Fore, Style
+from colorama import init, Fore, Style
 from heapq import heapify, heappush, heappop
 from math import inf
 from puzzle_solver.puzzle import (
@@ -15,6 +15,8 @@ from puzzle_solver.puzzle import (
     int64_to_list,
 )
 from puzzle_solver.visualizer import print_puzzle, clear_console
+
+init()
 
 def reconstruct_path(tree, finish):
     """
@@ -114,19 +116,25 @@ def solve_puzzle_astar(puzzle):
         visit_count += 1
         _, here = heappop(visit_queue)
         clear_console()
-        print(Fore.CYAN)
+        print('Current state:')
+        print(Fore.CYAN, end='')
         print_puzzle(here)
-        print(Style.RESET_ALL)
+        print(Style.RESET_ALL, end='')
+        print('heuristic_value = %d, cost = %d' % (h_value[here], cost[here]))
         current_cost = cost[here]
         next_states = next_moves(here)
+        print('Available state(s):')
         for next_state in next_states:
             if next_state not in cost:
+                print(Fore.YELLOW, end='')
                 print_puzzle(next_state)
+                print(Style.RESET_ALL)
                 parent[next_state] = here
                 cost[next_state] = current_cost + 1
                 h_value[next_state] = heuristic(next_state)
                 if next_state == INITIAL_PUZZLE:
-                    return reconstruct_path(parent, INITIAL_PUZZLE)
+                    return (reconstruct_path(parent, INITIAL_PUZZLE),
+                            visit_count)
                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
                                        next_state))
 

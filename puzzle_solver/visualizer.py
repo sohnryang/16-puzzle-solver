@@ -5,9 +5,12 @@ visualizer.py
 16-Puzzle visualizer for CLI
 """
 
+from colorama import init, Fore, Style
 from os import name, system
 from time import sleep
 from puzzle_solver.puzzle import int64_to_list
+
+init()
 
 def print_puzzle(puzzle):
     """
@@ -20,7 +23,7 @@ def print_puzzle(puzzle):
     """
     puzzle_list = int64_to_list(puzzle)
     for i, square in enumerate(puzzle_list):
-        print(square, end='\n' if i % 4 == 3 else ' ')
+        print('%-2d' % square, end='\n' if i % 4 == 3 else ' ')
 
 def clear_console():
     """
@@ -42,5 +45,7 @@ def animate(history, refresh_interval=0.5):
     """
     for puzzle_state in history:
         clear_console()
+        print(Fore.GREEN, end='')
         print_puzzle(puzzle_state)
         sleep(refresh_interval)
+    print(Style.RESET_ALL)
