@@ -10,7 +10,7 @@ square in the grid. This gives better performance than naive 2d-list approach,
 since 64-bit int does not require much memory and copying.
 """
 
-from random import randrange
+from random import choice
 
 INITIAL_PUZZLE = 0
 for i in range(1, 16):
@@ -49,28 +49,22 @@ def list_to_int64(puzzle_list):
     puzzle >>= 4
     return puzzle
 
-def randomize_puzzle(puzzle, shuffles=1000):
+def randomize_puzzle(puzzle, moves=100):
     """
-    randomize_puzzle(puzzle, shuffles=1000) -- randomize the puzzle
+    randomize_puzzle(puzzle, moves=100) -- randomize the puzzle
 
     Parameters
     ----------
     puzzle: int
         The puzzle represented in 64-bit int.
 
-    shuffles: int
-        The number of shuffles to make. 1000 by default. Must be even to make
-        the puzzle solvable.
+    moves: int
+        The number of shuffles to make. 100 by default.
     """
-    assert shuffles % 2 == 0
-    puzzle_list = int64_to_list(puzzle)
-    for _ in range(shuffles):
-        first = randrange(16)
-        second = randrange(16)
-        temp = puzzle_list[first]
-        puzzle_list[first] = puzzle_list[second]
-        puzzle_list[second] = temp
-    return list_to_int64(puzzle_list)
+    current = puzzle
+    for _ in range(moves):
+        current = choice(next_moves(current))
+    return current
 
 def next_moves(puzzle):
     """
