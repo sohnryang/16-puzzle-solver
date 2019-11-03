@@ -129,6 +129,5 @@ def solve_puzzle_astar(puzzle):
                     return reconstruct_path(parent, INITIAL_PUZZLE)
                 heappush(visit_queue, (cost[next_state] + h_value[next_state],
                                        next_state))
-    print(visit_count)
 
     return None
